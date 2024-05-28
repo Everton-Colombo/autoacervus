@@ -9,4 +9,5 @@ public interface UserDAO {
     List<User> getUsersWithBooksDueToday();
     List<User> getUsersWithNoBorrowedBooks();
     void saveUser(User user);
+    void updateUser(User user);
 }

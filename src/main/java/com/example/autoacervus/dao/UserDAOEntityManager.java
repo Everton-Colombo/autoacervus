@@ -42,4 +42,10 @@ public class UserDAOEntityManager implements UserDAO {
     public void saveUser(User user) {
         entityManager.persist(user);
     }
+
+    @Override
+    @Transactional
+    public void updateUser(User user) {
+        entityManager.merge(user);
+    }
 }

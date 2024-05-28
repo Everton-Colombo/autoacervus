@@ -2,10 +2,7 @@ package com.example.autoacervus.model.entity;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="Users")
@@ -20,7 +17,7 @@ public class User {
 
     @OneToMany(mappedBy = "borrower", orphanRemoval = true,
             cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
-    private Set<BorrowedBook> borrowedBooks = new HashSet<>();
+    private List<BorrowedBook> borrowedBooks = new LinkedList<>();
 
     public User(String emailDac, String sbuPassword) {
         this.emailDac = emailDac;
@@ -45,11 +42,11 @@ public class User {
         this.sbuPassword = password;
     }
 
-    public void setBorrowedBooks(Set<BorrowedBook> borrowedBooks) {
+    public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {
         this.borrowedBooks = borrowedBooks;
     }
 
-    public Set<BorrowedBook> getBorrowedBooks() {
+    public List<BorrowedBook> getBorrowedBooks() {
         return borrowedBooks;
     }
 
