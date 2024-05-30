@@ -12,6 +12,7 @@ public class SeleniumUtils {
 
     /**
      * Gets the page only if it isn't the current page.
+     * 
      * @param driver
      * @param url
      */

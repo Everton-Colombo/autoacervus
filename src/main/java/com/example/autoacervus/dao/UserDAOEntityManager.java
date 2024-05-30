@@ -26,7 +26,7 @@ public class UserDAOEntityManager implements UserDAO {
     @Override
     public List<User> getUsersWithBooksDueToday() {
         return entityManager.createQuery("SELECT user FROM User user JOIN user.borrowedBooks borrowedBook " +
-                        "WHERE borrowedBook.expectedReturnDate = :today", User.class)
+                "WHERE borrowedBook.expectedReturnDate = :today", User.class)
                 .setParameter("today", LocalDate.now())
                 .getResultList();
     }
@@ -34,7 +34,7 @@ public class UserDAOEntityManager implements UserDAO {
     @Override
     public List<User> getUsersWithNoBorrowedBooks() {
         return entityManager.createQuery("SELECT u FROM User u LEFT JOIN u.borrowedBooks b WHERE b IS NULL",
-                        User.class).getResultList();
+                User.class).getResultList();
     }
 
     @Override

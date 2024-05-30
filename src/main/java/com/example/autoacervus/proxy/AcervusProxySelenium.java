@@ -1,6 +1,5 @@
 package com.example.autoacervus.proxy;
 
-
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.BorrowedBookEntry;
 import com.example.autoacervus.model.entity.User;
@@ -54,13 +53,16 @@ public class AcervusProxySelenium implements AcervusProxy {
         enterBtn.click();
         // Wait for login attempt results:
         ExpectedCondition<Boolean> loginResultsAreShown = ExpectedConditions.or(
-            ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("#loginWindow > iframe")),   // Successful login
-            ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.help-block"), failedLoginMsg) // Failed login
+                ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("#loginWindow > iframe")), // Successful
+                                                                                                          // login
+                ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.help-block"), failedLoginMsg) // Failed
+                                                                                                                      // login
         );
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(loginResultsAreShown);
 
-        if (driver.getPageSource().contains(failedLoginMsg)) { return false; }
-        else {
+        if (driver.getPageSource().contains(failedLoginMsg)) {
+            return false;
+        } else {
             loggedInUser = user;
             return true;
         }
@@ -74,11 +76,12 @@ public class AcervusProxySelenium implements AcervusProxy {
     private BorrowedBook getBookFromRowData(List<WebElement> rowData) {
         BorrowedBook borrowedBook = new BorrowedBook();
         borrowedBook.setTitle(rowData.get(2).getText());
-//        borrowedBook.setCallNumber(rowData.get(3).getText());
-//        borrowedBook.setInventoryRegistryNumber(rowData.get(4).getText());
-//        borrowedBook.setLibrary(rowData.get(5).getText());
-//        LocalDate borrowDate = LocalDate.parse(rowData.get(6).getText(), dtFormatter);
-//        borrowedBook.setBorrowDate(borrowDate);
+        // borrowedBook.setCallNumber(rowData.get(3).getText());
+        // borrowedBook.setInventoryRegistryNumber(rowData.get(4).getText());
+        // borrowedBook.setLibrary(rowData.get(5).getText());
+        // LocalDate borrowDate = LocalDate.parse(rowData.get(6).getText(),
+        // dtFormatter);
+        // borrowedBook.setBorrowDate(borrowDate);
         LocalDate expectedReturnDate = LocalDate.parse(rowData.get(7).getText(), dtFormatter);
         borrowedBook.setExpectedReturnDate(expectedReturnDate);
 
@@ -89,14 +92,16 @@ public class AcervusProxySelenium implements AcervusProxy {
         SeleniumUtils.goToPage(driver, emprestimoUrl);
 
         checkForLogin();
-        List<WebElement> borrowedBooksRows = driver.findElements(By.cssSelector("div#gridCirculacaoAberta > table[role='grid'] > tbody > tr"));
+        List<WebElement> borrowedBooksRows = driver
+                .findElements(By.cssSelector("div#gridCirculacaoAberta > table[role='grid'] > tbody > tr"));
 
         List<BorrowedBookEntry> borrowedBookEntries = new LinkedList<>();
         for (WebElement borrowedBookRow : borrowedBooksRows) {
             List<WebElement> rowData = borrowedBookRow.findElements(By.cssSelector("td"));
             WebElement borrowedBookCheckbox = rowData.get(0).findElement(By.cssSelector(".k-checkbox"));
 
-            BorrowedBookEntry borrowedBookEntry = new BorrowedBookEntry(getBookFromRowData(rowData), borrowedBookCheckbox);
+            BorrowedBookEntry borrowedBookEntry = new BorrowedBookEntry(getBookFromRowData(rowData),
+                    borrowedBookCheckbox);
             borrowedBookEntries.add(borrowedBookEntry);
         }
 

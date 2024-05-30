@@ -12,24 +12,24 @@ import java.util.Objects;
 public class BorrowedBook {
 
     @Id
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
-    @JoinColumn(name="borrower")
+    @ManyToOne(cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH })
+    @JoinColumn(name = "borrower")
     private User borrower;
 
     @Id
-    @Column(name="title")
+    @Column(name = "title")
     private String title;
 
-    @Column(name="expectedReturnDate")
+    @Column(name = "expectedReturnDate")
     private LocalDate expectedReturnDate;
 
-    @Column(name="canRenew")
+    @Column(name = "canRenew")
     private boolean canRenew;
 
-//    private String callNumber;
-//    private String inventoryRegistryNumber;
-//    private String library;
-//    private LocalDate borrowDate;
+    // private String callNumber;
+    // private String inventoryRegistryNumber;
+    // private String library;
+    // private LocalDate borrowDate;
 
     public BorrowedBook(User borrower, String title, LocalDate expectedReturnDate) {
         this.borrower = borrower;
@@ -37,7 +37,8 @@ public class BorrowedBook {
         this.expectedReturnDate = expectedReturnDate;
     }
 
-    public BorrowedBook() {};
+    public BorrowedBook() {
+    };
 
     public User getBorrower() {
         return borrower;
@@ -80,8 +81,10 @@ public class BorrowedBook {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         BorrowedBook that = (BorrowedBook) o;
         return Objects.equals(this.borrower, that.borrower) && Objects.equals(this.title, that.title);
     }
