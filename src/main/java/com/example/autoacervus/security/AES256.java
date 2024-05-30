@@ -42,7 +42,6 @@ public class AES256 {
         }
     }
 
-
     public static String decrypt(String strToDecrypt, String secretKey, String salt) {
         try {
             byte[] encryptedData = Base64.getDecoder().decode(strToDecrypt);
@@ -69,6 +68,5 @@ public class AES256 {
             return null;
         }
     }
-
 
 }

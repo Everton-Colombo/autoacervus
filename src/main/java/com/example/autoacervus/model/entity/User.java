@@ -5,18 +5,18 @@ import jakarta.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name="Users")
+@Table(name = "Users")
 public class User {
 
     @Id
-    @Column(name="emailDac")
+    @Column(name = "emailDac")
     private String emailDac;
 
-    @Column(name="sbuPassword")
+    @Column(name = "sbuPassword")
     private String sbuPassword;
 
-    @OneToMany(mappedBy = "borrower", orphanRemoval = true,
-            cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.DETACH})
+    @OneToMany(mappedBy = "borrower", orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.REFRESH,
+            CascadeType.PERSIST, CascadeType.DETACH })
     private List<BorrowedBook> borrowedBooks = new LinkedList<>();
 
     public User(String emailDac, String sbuPassword) {
@@ -24,7 +24,8 @@ public class User {
         this.sbuPassword = sbuPassword;
     }
 
-    public User() {}
+    public User() {
+    }
 
     public String getEmailDac() {
         return emailDac;
@@ -57,8 +58,10 @@ public class User {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         User user = (User) o;
         return Objects.equals(emailDac, user.emailDac);
     }

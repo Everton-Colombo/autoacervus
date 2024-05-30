@@ -1,6 +1,5 @@
 package com.example.autoacervus.model.entity.id;
 
-
 import com.example.autoacervus.model.entity.User;
 
 import java.io.Serializable;
@@ -36,8 +35,10 @@ public class BorrowedBookId implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         BorrowedBookId that = (BorrowedBookId) o;
         return Objects.equals(borrower, that.borrower) && Objects.equals(title, that.title);
     }

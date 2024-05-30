@@ -27,7 +27,7 @@ public class BookRenewerDaemon extends Thread {
         driver.manage().window().setSize(new Dimension(1280, 720));
 
         this.proxy = new AcervusProxySelenium(driver);
-//        this.userDao = new UserDaoHibernateJpa();
+        // this.userDao = new UserDaoHibernateJpa();
 
         renewalQueue = new LinkedBlockingQueue<>(userDao.getUsersWithNoBorrowedBooks());
     }
@@ -47,7 +47,8 @@ public class BookRenewerDaemon extends Thread {
                 }
                 System.out.println("---");
 
-                // Update list of borrowed books; grabs any new entries and updates renewal dates.
+                // Update list of borrowed books; grabs any new entries and updates renewal
+                // dates.
                 List<BorrowedBook> borrowedBooks = proxy.getBorrowedBooks();
                 System.out.println("Registering book: " + borrowedBooks);
                 nextUser.updateBorrowedBooks(borrowedBooks);
@@ -64,6 +65,5 @@ public class BookRenewerDaemon extends Thread {
         super.interrupt();
         System.out.println("INTERRUPT");
     }
-
 
 }

@@ -1,12 +1,10 @@
 package com.example.autoacervus;
 
-import com.example.autoacervus.daemon.BookRenewerDaemon;
 import com.example.autoacervus.dao.UserDAO;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.proxy.AcervusProxy;
 import com.example.autoacervus.proxy.AcervusProxySelenium;
-import org.apache.commons.exec.CommandLine;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -33,7 +31,8 @@ public class AutoacervusApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-			// Por enquanto, pode-se usar esse bloco de código como uma espécie de função main.
+			// Por enquanto, pode-se usar esse bloco de código como uma espécie de função
+			// main.
 
 			WebDriver driver = new ChromeDriver();
 			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
