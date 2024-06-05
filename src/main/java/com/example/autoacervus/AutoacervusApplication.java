@@ -31,22 +31,22 @@ public class AutoacervusApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-			// Por enquanto, pode-se usar esse bloco de código como uma espécie de função
-			// main.
-
-			WebDriver driver = new ChromeDriver();
-			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-			driver.manage().window().setSize(new Dimension(1280, 720));
-
-			AcervusProxy proxy = new AcervusProxySelenium(driver);
-
-			User sampleUser = new User("e257234@dac.unicamp.br", "570366");
-			proxy.login(sampleUser);
-			List<BorrowedBook> borrowedBooks = proxy.getBorrowedBooks();
-			System.out.println(borrowedBooks);
-			sampleUser.setBorrowedBooks(borrowedBooks);
-
-			userDAO.updateUser(sampleUser);
+//			// Por enquanto, pode-se usar esse bloco de código como uma espécie de função
+//			// main.
+//
+//			WebDriver driver = new ChromeDriver();
+//			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+//			driver.manage().window().setSize(new Dimension(1280, 720));
+//
+//			AcervusProxy proxy = new AcervusProxySelenium(driver);
+//
+//			User sampleUser = new User("e257234@dac.unicamp.br", "570366");
+//			proxy.login(sampleUser);
+//			List<BorrowedBook> borrowedBooks = proxy.getBorrowedBooks();
+//			System.out.println(borrowedBooks);
+//			sampleUser.setBorrowedBooks(borrowedBooks);
+//
+//			userDAO.updateUser(sampleUser);
 		};
 	}
 
