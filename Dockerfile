@@ -6,11 +6,10 @@ WORKDIR /app
 COPY src /app/src
 COPY .mvn /app/.mvn
 COPY mvnw /app
-COPY mvnw.cmd /app
 COPY pom.xml /app
 RUN mv ./src/main/resources/application.docker.properties ./src/main/resources/application.properties
 
 RUN ./mvnw package -DskipTests
 
 # Run the application
-CMD ["java", "-jar", "target/dependency/webapp-runner.jar", "target/*.war"]
+CMD ["java", "-jar", "/app/target/autoacervus-0.0.1-SNAPSHOT.jar", "target/*.war"]

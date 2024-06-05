@@ -4,10 +4,7 @@ import com.example.autoacervus.dao.UserDAO;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.proxy.AcervusProxy;
-import com.example.autoacervus.proxy.AcervusProxySelenium;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import com.example.autoacervus.proxy.AcervusProxyRequests;
 
 import javax.security.auth.login.LoginException;
 import java.time.Duration;
@@ -16,17 +13,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class BookRenewerDaemon extends Thread {
     private LinkedBlockingQueue<User> renewalQueue;
-    private WebDriver driver;
     private AcervusProxy proxy;
     private UserDAO userDao;
 
     public BookRenewerDaemon() {
         super();
-        this.driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
-        driver.manage().window().setSize(new Dimension(1280, 720));
-
-        this.proxy = new AcervusProxySelenium(driver);
+        this.proxy = new AcervusProxyRequests();
         // this.userDao = new UserDaoHibernateJpa();
 
         renewalQueue = new LinkedBlockingQueue<>(userDao.getUsersWithNoBorrowedBooks());
