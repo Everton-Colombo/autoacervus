@@ -7,9 +7,11 @@ import com.example.autoacervus.util.SeleniumUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.stereotype.Component;
 
 import javax.security.auth.login.LoginException;
 import java.time.Duration;
@@ -18,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
+@Component
 public class AcervusProxySelenium implements AcervusProxy {
     private static final String homeUrl = "https://acervus.unicamp.br/";
     private static final String emprestimoUrl = "https://acervus.unicamp.br/emprestimo";
@@ -30,6 +33,10 @@ public class AcervusProxySelenium implements AcervusProxy {
 
     public AcervusProxySelenium(WebDriver driver) {
         this.driver = driver;
+    }
+
+    public AcervusProxySelenium() {
+        this(new ChromeDriver());
     }
 
     private User loggedInUser;
@@ -60,12 +67,23 @@ public class AcervusProxySelenium implements AcervusProxy {
         );
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(loginResultsAreShown);
 
-        if (driver.getPageSource().contains(failedLoginMsg)) {
-            return false;
-        } else {
+//        if (driver.getPageSource().contains(failedLoginMsg)) {
+//            return false;
+//        } else {
+//            loggedInUser = user;
+//            return true;
+//        }
+        if (isLoggedIn()) {
             loggedInUser = user;
             return true;
+        } else {
+            return false;
         }
+    }
+
+    private boolean isLoggedIn() {
+        driver.get(emprestimoUrl);
+        return !driver.getCurrentUrl().equals(loggedOutRedirectUrl);
     }
 
     private void checkForLogin() throws LoginException {
