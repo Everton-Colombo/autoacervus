@@ -16,7 +16,6 @@ public class BorrowedBook {
     @JoinColumn(name = "borrower")
     private User borrower;
 
-    @Id
     @Column(name = "title")
     private String title;
 
@@ -26,14 +25,24 @@ public class BorrowedBook {
     @Column(name = "canRenew")
     private boolean canRenew;
 
+    @Id
+    @Column(name = "code")
+    private int code;
+
+    @Id
+    @Column(name = "registryCode")
+    private int registryCode;
+
     // private String callNumber;
     // private String inventoryRegistryNumber;
     // private String library;
     // private LocalDate borrowDate;
 
-    public BorrowedBook(User borrower, String title, LocalDate expectedReturnDate) {
+    public BorrowedBook(User borrower, String title, int code, int registryCode, LocalDate expectedReturnDate) {
         this.borrower = borrower;
         this.title = title;
+        this.code = code;
+        this.registryCode = registryCode;
         this.expectedReturnDate = expectedReturnDate;
     }
 
@@ -56,6 +65,14 @@ public class BorrowedBook {
         return title;
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public int getRegistryCode() {
+        return registryCode;
+    }
+
     public LocalDate getExpectedReturnDate() {
         return expectedReturnDate;
     }
@@ -72,10 +89,22 @@ public class BorrowedBook {
         this.canRenew = canRenew;
     }
 
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public void setRegistryCode(int registryCode) {
+        this.registryCode = registryCode;
+    }
+
     @Override
     public String toString() {
         return "Book{" +
-                "title='" + title + '\'' +
+                "title='" + title + "', " +
+                "expectedReturnDate=" + expectedReturnDate + ", " +
+                "canRenew=" + canRenew + ", " +
+                "code=" + code + ", " +
+                "registryCode=" + registryCode +
                 '}';
     }
 
@@ -86,11 +115,12 @@ public class BorrowedBook {
         if (o == null || getClass() != o.getClass())
             return false;
         BorrowedBook that = (BorrowedBook) o;
-        return Objects.equals(this.borrower, that.borrower) && Objects.equals(this.title, that.title);
+        return Objects.equals(this.borrower, that.borrower) && Objects.equals(this.code, that.code)
+                && Objects.equals(this.registryCode, that.registryCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(borrower, title, expectedReturnDate, canRenew);
+        return Objects.hash(borrower, title, expectedReturnDate, canRenew, code, registryCode);
     }
 }

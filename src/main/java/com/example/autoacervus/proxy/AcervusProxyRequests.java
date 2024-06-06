@@ -124,17 +124,20 @@ public class AcervusProxyRequests implements AcervusProxy {
         }
 
         HttpEntity entity = response.getEntity();
-        if (entity != null) {
-          String result = EntityUtils.toString(entity);
-          JSONObject jsonObject = new JSONObject(result);
-          if (!jsonObject.has("resultado")) {
-            this.logger.severe("[IsLoggedIn] JSON response does not contain 'resultado' key.");
-            return false;
-          }
-
-          Boolean isLoggedIn = jsonObject.getBoolean("resultado");
-          return isLoggedIn;
+        if (entity == null) {
+          this.logger.severe("[IsLoggedIn] Response entity is null.");
+          return false;
         }
+
+        String result = EntityUtils.toString(entity);
+        JSONObject jsonObject = new JSONObject(result);
+        if (!jsonObject.has("resultado")) {
+          this.logger.severe("[IsLoggedIn] JSON response does not contain 'resultado' key.");
+          return false;
+        }
+
+        Boolean isLoggedIn = jsonObject.getBoolean("resultado");
+        return isLoggedIn;
       }
     } catch (Exception e) {
       this.logger.severe("[IsLoggedIn] Failed to check for login: " + e.getMessage());
@@ -166,36 +169,36 @@ public class AcervusProxyRequests implements AcervusProxy {
         }
 
         HttpEntity entity = response.getEntity();
-        if (entity != null) {
-          String result = EntityUtils.toString(entity);
-          JSONObject jsonObject = new JSONObject(result);
-          if (!jsonObject.has("Result")) {
-            this.logger.severe("[GetBorrowedBooks] JSON response does not contain 'Result' key. Returning empty list.");
-            return borrowedBooks;
-          }
-          JSONObject resultObject = jsonObject.getJSONObject("Result");
-          if (!resultObject.has("Data")) {
-            this.logger.severe("[GetBorrowedBooks] JSON response does not contain 'Data' key. Returning empty list.");
-            return borrowedBooks;
-          }
-          JSONArray bookArray;
-          try {
-            bookArray = resultObject.getJSONArray("Data");
-          } catch (Exception e) {
-            this.logger.severe(
-                "[GetBorrowedBooks] JSON response does not contain 'Data' key or it does not seem to be an array. Returning empty list.");
-            return borrowedBooks;
-          }
+        if (entity == null) {
+          this.logger.severe("[GetBorrowedBooks] Response entity is null. Returning empty list.");
+          return borrowedBooks;
+        }
 
-          for (int i = 0; i < bookArray.length(); i++) {
-            JSONObject bookEntry = bookArray.getJSONObject(i);
-            BorrowedBook borrowedBook = new BorrowedBook();
-            borrowedBook.setTitle(bookEntry.getString("Titulo"));
-            borrowedBook.setBorrower(this.user);
-            borrowedBook.setCanRenew(true);
-            borrowedBook.setExpectedReturnDate(LocalDate.now());
-            borrowedBooks.add(borrowedBook);
-          }
+        String result = EntityUtils.toString(entity);
+        JSONObject jsonObject = new JSONObject(result);
+        if (!jsonObject.has("Result")) {
+          this.logger.severe("[GetBorrowedBooks] JSON response does not contain 'Result' key. Returning empty list.");
+          return borrowedBooks;
+        }
+        JSONObject resultObject = jsonObject.getJSONObject("Result");
+        if (!resultObject.has("Data")) {
+          this.logger.severe("[GetBorrowedBooks] JSON response does not contain 'Data' key. Returning empty list.");
+          return borrowedBooks;
+        }
+        JSONArray bookArray;
+        try {
+          bookArray = resultObject.getJSONArray("Data");
+        } catch (Exception e) {
+          this.logger.severe(
+              "[GetBorrowedBooks] JSON response does not contain 'Data' key or it does not seem to be an array. Returning empty list.");
+          return borrowedBooks;
+        }
+
+        for (int i = 0; i < bookArray.length(); i++) {
+          JSONObject bookEntry = bookArray.getJSONObject(i);
+          BorrowedBook borrowedBook = new BorrowedBook(this.user, bookEntry.getString("Titulo"),
+              bookEntry.getInt("Codigo"), bookEntry.getInt("CodigoRegistro"), LocalDate.now());
+          borrowedBooks.add(borrowedBook);
         }
       }
 
@@ -208,10 +211,91 @@ public class AcervusProxyRequests implements AcervusProxy {
     return borrowedBooks;
   };
 
+  @SuppressWarnings("deprecation")
   @Override
-  public boolean renewBook(BorrowedBook book) throws LoginException {
+  public boolean renewBooks(List<BorrowedBook> books) {
+    // endpoint: /emprestimo/renovar, espera-se OK 200, é um post.
+    // payload: array com os livros. resposta:
+    // CirculacaoRenovadaSet -> array com objs -> Resultado == "Empréstimo
+    // renovado."
+
+    // Forge a renewal request to the Acervus API.
+    JSONArray renewArray = new JSONArray();
+    for (int i = 0; i < books.size(); i++) {
+      JSONObject bookPayload = new JSONObject();
+      bookPayload.put("Codigo", books.get(i).getCode());
+      bookPayload.put("CodigoRegistro", books.get(i).getRegistryCode());
+      bookPayload.put("Titulo", books.get(i).getTitle());
+      renewArray.put(bookPayload);
+    }
+
+    try (CloseableHttpClient httpClient = HttpClients.custom()
+        .setDefaultCookieStore(cookieStore)
+        .build()) {
+
+      HttpPost post = new HttpPost("https://acervus.unicamp.br/emprestimo/renovar");
+      post.setEntity(new StringEntity(renewArray.toString()));
+      post.setHeader("Content-Type", "application/json; charset=UTF-8");
+
+      this.logger.info("[RenewBooks] Sending login request with JSON payload...");
+      try (CloseableHttpResponse response = httpClient.execute(post)) {
+        final int responseCode = response.getCode();
+        if (responseCode != 200) {
+          this.logger.severe("[RenewBooks] HTTP status code is not 200 (received: " + responseCode + ")");
+          return false;
+        }
+
+        this.logger.info("[RenewBooks] Renew request was successfully accepted. Checking results...");
+
+        HttpEntity entity = response.getEntity();
+        if (entity == null) {
+          this.logger.severe("[RenewBooks] Response entity is null.");
+          return false;
+        }
+
+        String result = EntityUtils.toString(entity);
+        JSONObject jsonObject = new JSONObject(result);
+        if (!jsonObject.has("CirculacaoRenovadaSet")) {
+          this.logger.severe("[RenewBooks] JSON response does not contain 'CirculacaoRenovadaSet' key.");
+          return false;
+        }
+        JSONArray renewedBooks;
+        try {
+          renewedBooks = jsonObject.getJSONArray("CirculacaoRenovadaSet");
+        } catch (Exception e) {
+          this.logger.severe(
+              "[RenewBooks] JSON response does not contain 'CirculacaoRenovadaSet' key or it does not seem to be an array.");
+          return false;
+        }
+
+        for (int i = 0; i < renewedBooks.length(); i++) {
+          JSONObject book = renewedBooks.getJSONObject(i);
+          if (!book.has("Titulo")) {
+            continue;
+          }
+
+          if (!book.has("Resultado")) {
+            this.logger
+                .warning("[RenewBooks] Book \"" + book.getString("Titulo") + "\" does not contain 'Resultado' key.");
+            continue;
+          }
+
+          if (!book.getString("Resultado").equals("Empréstimo renovado.")) {
+            this.logger.warning("[RenewBooks] Book \"" + book.getString("Titulo") + "\" was not renewed.");
+            continue;
+          }
+
+          this.logger.info("[RenewBooks] Book \"" + book.getString("Titulo") + "\" was successfully renewed.");
+        }
+
+        return true;
+      }
+    } catch (Exception e) {
+      this.logger.severe("[RenewBooks] Failed to login: " + e.getMessage());
+    }
+
     return false;
-  };
+  }
 
   @Override
   public List<BorrowedBook> renewBooksDueToday() throws LoginException {

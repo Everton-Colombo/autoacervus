@@ -37,10 +37,12 @@ DROP TABLE IF EXISTS `autosbu`.`BorrowedBooks` ;
 CREATE TABLE IF NOT EXISTS `autosbu`.`BorrowedBooks` (
   `borrower` VARCHAR(30) NOT NULL,
   `title` VARCHAR(255) NOT NULL,
+  `code` INT NOT NULL,
+  `registryCode` INT NOT NULL,
   `expectedReturnDate` DATE NOT NULL,
   `canRenew` TINYINT NOT NULL,
   INDEX `fk_borrower_idx` (`borrower` ASC) VISIBLE,
-  PRIMARY KEY (`title`, `borrower`),
+  PRIMARY KEY (`code`, `registryCode`, `borrower`),
   CONSTRAINT `fk_borrower`
     FOREIGN KEY (`borrower`)
     REFERENCES `autosbu`.`Users` (`emailDac`)

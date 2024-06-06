@@ -7,14 +7,16 @@ import java.util.Objects;
 
 public class BorrowedBookId implements Serializable {
     private User borrower;
-    private String title;
+    private int code;
+    private int registryCode;
 
     public BorrowedBookId() {
     }
 
-    public BorrowedBookId(User borrower, String title) {
+    public BorrowedBookId(User borrower, int code, int registryCode) {
         this.borrower = borrower;
-        this.title = title;
+        this.code = code;
+        this.registryCode = registryCode;
     }
 
     public User getBorrower() {
@@ -25,12 +27,20 @@ public class BorrowedBookId implements Serializable {
         this.borrower = borrower;
     }
 
-    public String getTitle() {
-        return title;
+    public int getCode() {
+        return code;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public int getRegistryCode() {
+        return registryCode;
+    }
+
+    public void setRegistryCode(int registryCode) {
+        this.registryCode = registryCode;
     }
 
     @Override
@@ -40,11 +50,12 @@ public class BorrowedBookId implements Serializable {
         if (o == null || getClass() != o.getClass())
             return false;
         BorrowedBookId that = (BorrowedBookId) o;
-        return Objects.equals(borrower, that.borrower) && Objects.equals(title, that.title);
+        return Objects.equals(borrower, that.borrower) && Objects.equals(code, that.code)
+                && Objects.equals(registryCode, that.registryCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(borrower, title);
+        return Objects.hash(borrower, code, registryCode);
     }
 }

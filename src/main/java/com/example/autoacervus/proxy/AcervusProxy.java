@@ -11,7 +11,7 @@ public interface AcervusProxy {
 
     List<BorrowedBook> getBorrowedBooks();
 
-    boolean renewBook(BorrowedBook book) throws LoginException;
+    boolean renewBooks(List<BorrowedBook> book);
 
     List<BorrowedBook> renewBooksDueToday() throws LoginException;
 }

@@ -5,6 +5,7 @@ import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.proxy.AcervusProxy;
 import com.example.autoacervus.proxy.AcervusProxyRequests;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,14 +13,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import java.time.Duration;
 import java.util.List;
+import java.util.logging.Logger;
 
 @SpringBootApplication
 public class AutoacervusApplication {
 
 	@Autowired
 	private UserDAO userDAO;
+
+	private Logger logger = Logger.getLogger(AutoacervusApplication.class.getName());
 
 	public static void main(String[] args) {
 		SpringApplication.run(AutoacervusApplication.class, args);
@@ -32,17 +35,17 @@ public class AutoacervusApplication {
 			// main.
 			AcervusProxy proxy = new AcervusProxyRequests();
 
-			User sampleUser = new User("l252615@dac.unicamp.br", "123110");
+			User sampleUser = new User("e257234@dac.unicamp.br", "570366");
 			final boolean hasLoggedIn = proxy.login(sampleUser);
 			if (!hasLoggedIn) {
-				System.out.println("Failed to log in.");
+				this.logger.severe("Failed to log in.");
 				return;
 			}
-			// List<BorrowedBook> borrowedBooks = proxy.getBorrowedBooks();
-			// System.out.println(borrowedBooks);
-			// sampleUser.setBorrowedBooks(borrowedBooks);
-
-			// userDAO.updateUser(sampleUser);
+			List<BorrowedBook> borrowedBooks = proxy.getBorrowedBooks();
+			this.logger.info(borrowedBooks.toString());
+			sampleUser.setBorrowedBooks(borrowedBooks);
+			proxy.renewBooks(borrowedBooks);
+			userDAO.updateUser(sampleUser);
 		};
 	}
 
