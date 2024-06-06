@@ -7,14 +7,15 @@ import com.example.autoacervus.proxy.AcervusProxy;
 import com.example.autoacervus.proxy.AcervusProxyRequests;
 
 import javax.security.auth.login.LoginException;
-import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.logging.Logger;
 
 public class BookRenewerDaemon extends Thread {
     private LinkedBlockingQueue<User> renewalQueue;
     private AcervusProxy proxy;
     private UserDAO userDao;
+    private Logger logger = Logger.getLogger(BookRenewerDaemon.class.getName());
 
     public BookRenewerDaemon() {
         super();
@@ -33,16 +34,20 @@ public class BookRenewerDaemon extends Thread {
                 proxy.login(nextUser);
 
                 List<BorrowedBook> renewedBooks = proxy.renewBooksDueToday();
-                System.out.println("Renewed books:");
+                String borrowedBookString = renewedBooks.isEmpty() ? "No books to renew." : "Renewed books:";
                 for (BorrowedBook book : renewedBooks) {
-                    System.out.println(book);
+                    borrowedBookString += "\n" + book;
                 }
-                System.out.println("---");
+                this.logger.info(borrowedBookString);
 
                 // Update list of borrowed books; grabs any new entries and updates renewal
                 // dates.
                 List<BorrowedBook> borrowedBooks = proxy.getBorrowedBooks();
-                System.out.println("Registering book: " + borrowedBooks);
+                String registeredBookString = borrowedBooks.isEmpty() ? "No books to register." : "Registered books:";
+                for (BorrowedBook book : borrowedBooks) {
+                    registeredBookString += "\n" + book;
+                }
+                this.logger.info(registeredBookString);
                 nextUser.updateBorrowedBooks(borrowedBooks);
                 userDao.saveUser(nextUser);
 
@@ -55,7 +60,7 @@ public class BookRenewerDaemon extends Thread {
     @Override
     public void interrupt() {
         super.interrupt();
-        System.out.println("INTERRUPT");
+        this.logger.severe("Book renewal daemon interrupted.");
     }
 
 }

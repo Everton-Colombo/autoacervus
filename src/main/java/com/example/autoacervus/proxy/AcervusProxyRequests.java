@@ -18,6 +18,7 @@ import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.apache.hc.client5.http.cookie.CookieStore;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 
@@ -32,8 +33,8 @@ public class AcervusProxyRequests implements AcervusProxy {
   @SuppressWarnings("deprecation")
   @Override
   public boolean login(User user) {
-    this.logger.info("[Login] Clearing previous cookies...");
-    this.cookieStore.clear();
+    // Logout previously logged in user.
+    this.logout();
 
     // Forge a login request to the Acervus API and save cookies.
     final JSONObject jsonPayload = new JSONObject();
@@ -69,6 +70,30 @@ public class AcervusProxyRequests implements AcervusProxy {
     }
 
     return false;
+  }
+
+  @SuppressWarnings("deprecation")
+  private void logout() {
+    this.logger.info("[Logout] Logging out and clearing previous cookies...");
+    this.logout();
+    this.cookieStore.clear();
+    // Forge a logout request to the Acervus API.
+    try (CloseableHttpClient httpClient = HttpClients.custom()
+        .setDefaultCookieStore(cookieStore)
+        .build()) {
+
+      HttpGet get = new HttpGet("https://acervus.unicamp.br/logout");
+      this.logger.info("[Logout] Sending logout request...");
+      try (CloseableHttpResponse response = httpClient.execute(get)) {
+        final int responseCode = response.getCode();
+        if (responseCode != 302) {
+          this.logger.severe("[Logout] HTTP status code is not 302 (received: " + responseCode
+              + "). Ignoring, as it seems there is no one logged in.");
+        }
+      }
+    } catch (Exception e) {
+      this.logger.severe("[Logout] Failed to logout (probably not logged in): " + e.getMessage());
+    }
   }
 
   @SuppressWarnings("deprecation")
