@@ -6,9 +6,12 @@ import com.example.autoacervus.model.entity.User;
 
 import javax.security.auth.login.LoginException;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -30,9 +33,12 @@ public class AcervusProxyRequests implements AcervusProxy {
   public AcervusProxyRequests() {
   }
 
+  private User user;
+
   @SuppressWarnings("deprecation")
   @Override
-  public boolean login(User user) {
+  public boolean login(User user) throws LoginException {
+    this.user = user;
     // Logout previously logged in user.
     this.logout();
 
@@ -64,7 +70,7 @@ public class AcervusProxyRequests implements AcervusProxy {
         return true;
       }
 
-      throw new LoginException("HTTP session not stored properly (major Acervus API changes?)");
+      throw new LoginException("Invalid credentials");
     } catch (Exception e) {
       this.logger.severe("[Login] Failed to login: " + e.getMessage());
     }
@@ -75,7 +81,6 @@ public class AcervusProxyRequests implements AcervusProxy {
   @SuppressWarnings("deprecation")
   private void logout() {
     this.logger.info("[Logout] Logging out and clearing previous cookies...");
-    this.logout();
     this.cookieStore.clear();
     // Forge a logout request to the Acervus API.
     try (CloseableHttpClient httpClient = HttpClients.custom()
@@ -138,9 +143,69 @@ public class AcervusProxyRequests implements AcervusProxy {
     return false;
   }
 
+  @SuppressWarnings("deprecation")
   @Override
-  public List<BorrowedBook> getBorrowedBooks() throws LoginException {
-    return null;
+  public List<BorrowedBook> getBorrowedBooks() {
+    LinkedList<BorrowedBook> borrowedBooks = new LinkedList<>();
+    // Forge a request to the Acervus API to list currently borrowed books
+    try (CloseableHttpClient httpClient = HttpClients.custom()
+        .setDefaultCookieStore(cookieStore)
+        .build()) {
+
+      HttpPost post = new HttpPost("https://acervus.unicamp.br/emprestimo/ListarCirculacoesEmAberto");
+      post.setEntity(new StringEntity("{\"sort\": \"DataEmprestimo-desc\"}"));
+      post.setHeader("Content-Type", "application/json; charset=UTF-8");
+
+      this.logger.info("[GetBorrowedBooks] Sending request...");
+      try (CloseableHttpResponse response = httpClient.execute(post)) {
+        final int responseCode = response.getCode();
+        if (responseCode != 200) {
+          this.logger.severe(
+              "[GetBorrowedBooks] HTTP status code is not 200 (received: " + responseCode + "). Returning empty list.");
+          return borrowedBooks;
+        }
+
+        HttpEntity entity = response.getEntity();
+        if (entity != null) {
+          String result = EntityUtils.toString(entity);
+          JSONObject jsonObject = new JSONObject(result);
+          if (!jsonObject.has("Result")) {
+            this.logger.severe("[GetBorrowedBooks] JSON response does not contain 'Result' key. Returning empty list.");
+            return borrowedBooks;
+          }
+          JSONObject resultObject = jsonObject.getJSONObject("Result");
+          if (!resultObject.has("Data")) {
+            this.logger.severe("[GetBorrowedBooks] JSON response does not contain 'Data' key. Returning empty list.");
+            return borrowedBooks;
+          }
+          JSONArray bookArray;
+          try {
+            bookArray = resultObject.getJSONArray("Data");
+          } catch (Exception e) {
+            this.logger.severe(
+                "[GetBorrowedBooks] JSON response does not contain 'Data' key or it does not seem to be an array. Returning empty list.");
+            return borrowedBooks;
+          }
+
+          for (int i = 0; i < bookArray.length(); i++) {
+            JSONObject bookEntry = bookArray.getJSONObject(i);
+            BorrowedBook borrowedBook = new BorrowedBook();
+            borrowedBook.setTitle(bookEntry.getString("Titulo"));
+            borrowedBook.setBorrower(this.user);
+            borrowedBook.setCanRenew(true);
+            borrowedBook.setExpectedReturnDate(LocalDate.now());
+            borrowedBooks.add(borrowedBook);
+          }
+        }
+      }
+
+      this.logger.info("[GetBorrowedBooks] Request was successfully parsed.");
+    } catch (Exception e) {
+      this.logger.severe("[GetBorrowedBooks] Failed to retrieve borrowed books: " + e.getMessage());
+      borrowedBooks.clear();
+    }
+
+    return borrowedBooks;
   };
 
   @Override

@@ -7,9 +7,9 @@ import javax.security.auth.login.LoginException;
 import java.util.List;
 
 public interface AcervusProxy {
-    boolean login(User user);
+    boolean login(User user) throws LoginException;
 
-    List<BorrowedBook> getBorrowedBooks() throws LoginException;
+    List<BorrowedBook> getBorrowedBooks();
 
     boolean renewBook(BorrowedBook book) throws LoginException;
 
