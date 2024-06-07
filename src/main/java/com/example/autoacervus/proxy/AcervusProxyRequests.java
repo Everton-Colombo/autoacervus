@@ -1,7 +1,6 @@
 package com.example.autoacervus.proxy;
 
 import com.example.autoacervus.model.entity.BorrowedBook;
-// import com.example.autoacervus.model.BorrowedBookEntry;
 import com.example.autoacervus.model.entity.User;
 
 import javax.security.auth.login.LoginException;
