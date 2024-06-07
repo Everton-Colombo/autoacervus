@@ -76,6 +76,7 @@ public class User {
         return "User{" +
                 "emailDac='" + emailDac + '\'' +
                 ", borrowedBooks=" + borrowedBooks +
+                ", sbuPassword='" + sbuPassword + '\'' +
                 '}';
     }
 }

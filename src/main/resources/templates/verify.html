@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify - AutoAcervus</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Verificando suas credenciais...</h1>
+    </header>
+    <main>
+        <p><strong>Email:</strong> <span id="email" th:text="${createdUser.emailDac}"></span></p>
+        <p><strong>Senha SBU:</strong> <span id="dac-password" th:text="${createdUser.sbuPassword}"></span></p>
+        <p><strong>Status:</strong> <span id="status" class="status-verifying" th:text="${status}"></span></p>
+    </main>
+</div>
+<script src="script.js"></script>
+</body>
+</html>

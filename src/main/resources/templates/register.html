@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - AutoAcervus</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Registre-se no AutoAcervus</h1>
+        <p>Junte-se a nós para agilizar sua experiência com as bibliotecas da Unicamp!</p>
+    </header>
+    <main>
+        <form action="#" th:action="@{/register}" th:object="${newUser}" method="post" class="registration-form">
+            <div class="form-group">
+                <label for="email-dac">Email DAC:</label>
+                <input type="email" id="email-dac" name="email-dac" th:field="*{emailDac}" required>
+            </div>
+            <div class="form-group">
+                <label for="sbu-password">Senha SBU:</label>
+                <input type="password" id="sbu-password" name="sbu-password" th:field="*{sbuPassword}" required>
+            </div>
+            <button type="submit" class="submit-button">Registrar!</button>
+        </form>
+    </main>
+</div>
+</body>
+</html>
