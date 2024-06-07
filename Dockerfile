@@ -20,4 +20,4 @@ RUN cp chromedriver-linux64/chromedriver /app/src/main/resources/webdrivers/chro
 RUN ./mvnw package -DskipTests
 
 # Run the application
-CMD ["java", "-jar", "target/autoacervus-0.0.1-SNAPSHOT.jar", "target/*.war"]
+CMD ["java", "-jar", "/app/target/autoacervus-0.0.1-SNAPSHOT.jar", "target/*.war"]

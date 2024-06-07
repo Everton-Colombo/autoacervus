@@ -1,8 +1,7 @@
 package com.example.autoacervus.model.entity;
-
-import com.example.autoacervus.model.entity.id.BorrowedBookId;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -16,7 +15,18 @@ public class BorrowedBook {
     @JoinColumn(name = "borrower")
     private User borrower;
 
+
+    // Os atributos a seguir referem-se aos atributos "código" e "códigoRegistro" especificados nos JSONs da API interna
+    // do acervus. Pouco se sabe sobre a diferença entre os dois, mas pelo menos um deles é utilizado com identificador
+    // nas operações dessa API.
     @Id
+    @Column(name = "code")
+    private int code;
+
+    @Id
+    @Column(name = "registryCode")
+    private int registryCode;
+
     @Column(name = "title")
     private String title;
 
@@ -31,9 +41,11 @@ public class BorrowedBook {
     // private String library;
     // private LocalDate borrowDate;
 
-    public BorrowedBook(User borrower, String title, LocalDate expectedReturnDate) {
+    public BorrowedBook(User borrower, String title, int code, int registryCode, LocalDate expectedReturnDate) {
         this.borrower = borrower;
         this.title = title;
+        this.code = code;
+        this.registryCode = registryCode;
         this.expectedReturnDate = expectedReturnDate;
     }
 
@@ -56,6 +68,14 @@ public class BorrowedBook {
         return title;
     }
 
+    public int getCode() {
+        return code;
+    }
+
+    public int getRegistryCode() {
+        return registryCode;
+    }
+
     public LocalDate getExpectedReturnDate() {
         return expectedReturnDate;
     }
@@ -72,10 +92,22 @@ public class BorrowedBook {
         this.canRenew = canRenew;
     }
 
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public void setRegistryCode(int registryCode) {
+        this.registryCode = registryCode;
+    }
+
     @Override
     public String toString() {
         return "Book{" +
-                "title='" + title + '\'' +
+                "title='" + title + "', " +
+                "expectedReturnDate=" + expectedReturnDate + ", " +
+                "canRenew=" + canRenew + ", " +
+                "code=" + code + ", " +
+                "registryCode=" + registryCode +
                 '}';
     }
 
@@ -86,11 +118,68 @@ public class BorrowedBook {
         if (o == null || getClass() != o.getClass())
             return false;
         BorrowedBook that = (BorrowedBook) o;
-        return Objects.equals(this.borrower, that.borrower) && Objects.equals(this.title, that.title);
+        return Objects.equals(this.borrower, that.borrower) && Objects.equals(this.code, that.code)
+                && Objects.equals(this.registryCode, that.registryCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(borrower, title, expectedReturnDate, canRenew);
+        return Objects.hash(borrower, title, expectedReturnDate, canRenew, code, registryCode);
+    }
+}
+
+// Classe de ID, requerida pelo Hibernate
+class BorrowedBookId implements Serializable {
+    private User borrower;
+    private int code;
+    private int registryCode;
+
+    public BorrowedBookId() {
+    }
+
+    public BorrowedBookId(User borrower, int code, int registryCode) {
+        this.borrower = borrower;
+        this.code = code;
+        this.registryCode = registryCode;
+    }
+
+    public User getBorrower() {
+        return borrower;
+    }
+
+    public void setBorrower(User borrower) {
+        this.borrower = borrower;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public int getRegistryCode() {
+        return registryCode;
+    }
+
+    public void setRegistryCode(int registryCode) {
+        this.registryCode = registryCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        BorrowedBookId that = (BorrowedBookId) o;
+        return Objects.equals(borrower, that.borrower) && Objects.equals(code, that.code)
+                && Objects.equals(registryCode, that.registryCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(borrower, code, registryCode);
     }
 }

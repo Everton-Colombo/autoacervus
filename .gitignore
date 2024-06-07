@@ -1,6 +1,9 @@
 # MySQL Database
 db/
 
+# Untracked files
+*.untracked.*
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
