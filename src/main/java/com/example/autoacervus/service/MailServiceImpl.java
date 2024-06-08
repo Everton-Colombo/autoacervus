@@ -8,6 +8,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -31,6 +32,7 @@ public class MailServiceImpl implements MailService {
     private String fromMail;
 
     @Override
+    @Async
     public void sendSimpleMail(String to, String subject, String content) {
         logger.info("[sendSimpleMail()] subject: \"%s\"; to: %s]".formatted(subject, to));
         SimpleMailMessage message = new SimpleMailMessage();
@@ -67,6 +69,7 @@ public class MailServiceImpl implements MailService {
      * @param templateModel map containing values that will be used to render the html.
      */
     @Override
+    @Async
     public void sendHtmlTemplateMail(String to, String subject, String template, Map<String, Object> templateModel) {
         logger.info("[sendHtmlTemplateMail()] subject: \"%s\"; template: \"%s\"; to: %s]".formatted(subject, template, to));
 
@@ -81,6 +84,8 @@ public class MailServiceImpl implements MailService {
         }
     }
 
+    @Override
+    @Async
     public void sendHtmlTemplateMail(String to, String subject, String template) {
         this.sendHtmlTemplateMail(to, subject, template, new HashMap<>());
     }

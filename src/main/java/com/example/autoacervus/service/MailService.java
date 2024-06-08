@@ -15,4 +15,5 @@ public interface MailService {
      * @param templateModel map containing values that will be used to render the html.
      */
     void sendHtmlTemplateMail(String to, String subject, String template, Map<String, Object> templateModel);
+    void sendHtmlTemplateMail(String to, String subject, String template);
 }
