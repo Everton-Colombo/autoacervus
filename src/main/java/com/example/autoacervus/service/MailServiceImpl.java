@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -78,5 +79,9 @@ public class MailServiceImpl implements MailService {
         } catch (MessagingException e) {
             logger.severe("[sendHtmlTemplateMail()] Failed to send html mail. Error msg: " + e.getMessage());
         }
+    }
+
+    public void sendHtmlTemplateMail(String to, String subject, String template) {
+        this.sendHtmlTemplateMail(to, subject, template, new HashMap<>());
     }
 }
