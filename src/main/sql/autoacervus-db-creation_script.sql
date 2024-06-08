@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `autoacervus`.`BorrowedBooks` (
   `borrower` VARCHAR(30) NOT NULL,
   `code` INT NOT NULL,
   `registryCode` INT NOT NULL,
-  `title` VARCHAR(45) NOT NULL,
+  `title` VARCHAR(255) NOT NULL,
   `expectedReturnDate` DATE NOT NULL,
   `canRenew` TINYINT NOT NULL,
   INDEX `fk_borrower_idx` (`borrower` ASC) VISIBLE,
