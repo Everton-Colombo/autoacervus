@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/debugApi")
 public class DebugApiController {
@@ -16,7 +19,10 @@ public class DebugApiController {
 
     @PostMapping("/sendMail")
     public String sendMail() {
-        emailService.sendSimpleMail("e.rcolombo2@gmail.com", "Teste", "aoba");
+//        emailService.sendSimpleMail("e.rcolombo2@gmail.com", "Teste", "aoba");
+        Map<String, Object> templateModel = new HashMap<>();
+        templateModel.put("message", "Hello World");
+        emailService.sendHtmlTemplateMail("e.rcolombo2@gmail.com", "Teste", "mail/test-template.html", templateModel);
 
         return "done";
     }
