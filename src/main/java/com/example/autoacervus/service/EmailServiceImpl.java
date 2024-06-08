@@ -47,6 +47,7 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    // TODO: make EmailService an abstract class?
     private void sendHtmlMail(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
