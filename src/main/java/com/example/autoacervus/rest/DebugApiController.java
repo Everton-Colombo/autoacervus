@@ -1,7 +1,6 @@
 package com.example.autoacervus.rest;
 
-import com.example.autoacervus.service.EmailService;
-import com.example.autoacervus.service.EmailServiceImpl;
+import com.example.autoacervus.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +14,7 @@ import java.util.Map;
 public class DebugApiController {
 
     @Autowired
-    private EmailService emailService;
+    private MailService emailService;
 
     @PostMapping("/sendMail")
     public String sendMail() {

@@ -2,7 +2,7 @@ package com.example.autoacervus.service;
 
 import java.util.Map;
 
-public interface EmailService {
+public interface MailService {
     void sendSimpleMail(String to, String subject, String content);
 
     /**

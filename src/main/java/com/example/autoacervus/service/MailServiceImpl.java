@@ -8,9 +8,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -18,7 +16,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @Service
-public class EmailServiceImpl implements EmailService {
+public class MailServiceImpl implements MailService {
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
