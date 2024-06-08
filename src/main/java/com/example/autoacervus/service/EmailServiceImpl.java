@@ -29,6 +29,7 @@ public class EmailServiceImpl implements EmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(content);
+
         try {
             emailSender.send(message);
         } catch (MailException e) {
