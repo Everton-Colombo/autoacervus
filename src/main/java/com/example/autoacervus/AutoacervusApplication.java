@@ -12,11 +12,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.List;
 import java.util.logging.Logger;
 
 @SpringBootApplication
+@EnableAsync
 public class AutoacervusApplication {
 
 	@Autowired
