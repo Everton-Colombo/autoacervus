@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
     private Logger logger = Logger.getLogger(RegistrationServiceImpl.class.getName());
+
     @Autowired
     UserDAO userDao;
 
