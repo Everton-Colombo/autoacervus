@@ -1,22 +1,153 @@
 <!DOCTYPE html>
-<html lang="pt" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoAcervus</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Bem-vindo ao AutoAcervus!</h1>
-            <p>A solução final para renovações de livros de bibliotecas da Unicamp!</p>
-        </header>
-        <main>
-            <h2>Registre-se agora!</h2>
-            <p>Poupe viagens às bibliotecas e maximize o tempo de empréstimo de seus livros!</p>
-            <a th:href="@{/register}" class="register-button">Registrar agora</a>
-        </main>
-    </div>
-</body>
+<html lang="PT" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+      integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+      crossorigin="anonymous"
+    />
+    <!-- <link rel="stylesheet" href="./style.css" /> -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <title>Autoacervus - Home</title>
+    <link rel="icon" type="image/x-icon" th:href="@{images/fav.png}" />
+  </head>
+
+  <body>
+    <header id="home" class="hero">
+      <div class="navbar top home-navbar" id="navbar">
+        <a class="logo-a" href="#home">
+          <div class="logo">
+            <img alt="image" th:src="@{images/logo.svg}" class="home-image" />
+            <h1 class="logo-heading">
+              <span class="lh-auto">auto</span>
+              <span class="lh-acervus">acervus</span>
+            </h1>
+          </div>
+        </a>
+
+        <nav>
+          <ul>
+            <li><a href="#faq">Sobre</a></li>
+            <li><a href="">Contato</a></li>
+            <li><a href="" class="primary-color">Entrar</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="content">
+        <div id="login-card" class="centered">
+          <div id="logo-info">
+            <div class="logo">
+              <img alt="image" th:src="@{images/logo.svg}" class="home-image" />
+              <h1 class="logo-heading">
+                <span class="lh-auto">auto</span>
+                <span class="lh-acervus">acervus</span>
+              </h1>
+            </div>
+
+            <p class="info">
+              Registre-se com seu e-mail DAC e com sua senha SBU (Sistema de
+              Bibliotecas da Unicamp) para habilitar a renovação automática dos
+              seus livros emprestados!
+            </p>
+          </div>
+
+          <form action="#" class="login-register" th:object="${newUser}" method="post">
+            <span class="entrar-ou-registrar">
+              <span class="primary-color">Entrar</span><span> ou </span
+              ><span class="primary-color">Registrar</span>
+              <br />
+            </span>
+
+            <div class="inputs">
+              <input type="email" required="true" placeholder="e-mail DAC" th:field="*{emailDac}" />
+              <input type="password" required="true" placeholder="Senha SBU" th:field="*{sbuPassword}" />
+            </div>
+
+            <div class="buttons">
+              <button type="submit" th:formaction="@{/register}" class="filled">
+                Registrar Agora!
+              </button>
+              <span class="or">- ou -</span>
+              <button type="button" class="hollow">Entrar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </header>
+    <hr />
+    <main>
+      <section id="faq">
+        <h2 class="section-title">Perguntas Frequentes</h2>
+        <div class="container home-faq">
+          <div class="faq">
+            <p class="faq-question">Como funciona?</p>
+            <div class="faq-answer">
+              <p>
+                Nosso sistema automaticamente renova os livros dos usuários
+                registrados no dia em que o empréstimo venceria, maximizando o
+                tempo com o qual se pode ficar com um livro emprestado.
+              </p>
+              <p>Faze</p>
+            </div>
+          </div>
+
+          <div class="faq">
+            <p class="faq-question">É seguro?</p>
+            <div class="faq-answer">
+              <p>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Doloribus possimus nihil necessitatibus cupiditate? Eum
+                perferendis commodi esse, dicta impedit excepturi!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="flex-line">
+        <div class="social">
+          <a target="_blank" href=""
+            ><i class="fab fa-twitter fa-2x"></i
+          ></a>
+          <a
+            target="_blank"
+            href=""
+            ><i class="fab fa-youtube fa-2x"></i
+          ></a>
+        </div>
+
+        <div class="credits">
+          <div class="entry">
+            <span>Everton Romanzini Colombo&nbsp</span>
+            <span>(everton.colombo@students.ic.unicamp.br)</span>
+          </div>
+
+          <div class="entry">
+            <span>Lucas Rodrigues Pimentel &nbsp</span>
+            <span>(lucas.pimentel@students.ic.unicamp.br)</span>
+          </div>
+
+          <div class="entry">
+            <span>Leonardo Henrique Guimarães &nbsp</span>
+            <span>(leonardo.guimaraes@students.ic.unicamp.br)</span>
+          </div>
+        </div>
+
+        <p>Projeto final de MC322 1s2024 turma C.</p>
+      </div>
+    </footer>
+  </body>
 </html>

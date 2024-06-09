@@ -1,0 +1,313 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@200..900&display=swap');
+
+:root {
+  --primary: #a22020;
+  --primary-light: #e14747;
+  --secondary: #14A9FF;
+  --secondary-light: #85DCFF;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  color: black;
+}
+
+html {
+  min-height: 100%;
+  position: relative;
+  scroll-behavior: smooth;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+input {
+  border-color: var(--primary);
+  border-radius: 4px;
+  border-width: 1px;
+  padding: 8px 1rem;
+  font-size: 16px;
+  letter-spacing: normal;
+  line-height: 1.15;
+  font-family: "Fira Sans";
+}
+
+button.filled {
+  background-color: var(--primary);
+  color: white;
+  
+}
+
+button.hollow {
+  background-color: white;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+button {
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 4px;
+  padding: 8px 32px;
+  text-align: center;
+  border-width: 1px;
+  line-height: 1.15;
+}
+
+button:hover {
+  /*opacity: 0.75;*/
+  /*background-color: var(--primary-light);*/
+  border-color: black;
+  border-width: 3px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.primary-color {
+  color: var(--primary);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  font-size: 0; /* to eliminate space between spans */
+}
+
+.logo img {
+  width: 38px;
+  height: 42px;
+}
+
+.logo h1 {
+  margin-left: 10px;
+}
+
+.logo span {
+  font-size: 32px;
+  padding: 10;
+  font-family: "PT Sans";
+  font-weight: 600;
+}
+
+.logo .lh-auto {
+  color: black;
+}
+
+.logo .lh-acervus {
+  color: var(--primary);
+}
+
+/* Header */
+.hero {
+  height: 100vh;
+  position: relative;
+}
+
+/* Navbar */
+.navbar {
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 5px 5px 10px 0px #d4d4d4;
+  background-color: white;
+  width: 100%;
+  height: 70px;
+  position: fixed;
+  top: 0px;
+  padding: 0 10%;
+
+  font-family: "PT Sans";
+}
+
+.navbar ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar ul li {
+  margin: 0 1rem;
+  font-size: 24px;
+  font-weight: 600;
+  /* text-transform: lowercase; */
+}
+
+.navbar ul li a:hover {
+  /* text-decoration: underline; */
+  opacity: 0.8;
+  color: var(--primary);
+}
+
+.hero .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+}
+
+#login-card {
+  width: 60%;
+  max-width: 1000px;
+  background-color: whitesmoke;
+
+  border: black 1px solid;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#login-card #logo-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 75%;
+  margin-right: 20px;
+}
+
+
+#logo-info .logo img {
+  scale: 2;
+  margin-right: 24px;
+}
+
+#logo-info .logo .logo-heading span {
+  font-size: 64px;
+}
+
+#logo-info .info {
+  text-align: justify;
+  font-weight: 400;
+  font-family: "Fira Sans";
+  font-size: 18px;
+  margin: 40px 0;
+  letter-spacing: 1px;
+}
+
+.login-register {
+  width: 350px;
+  /* height: 300px; */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: center;
+  padding: 16px;
+  margin-left: 20px;
+  text-align: center;
+  background-color: rgb(235, 235, 235);
+  border-radius: 8px;
+  border: #ddd solid 1px;
+}
+
+.login-register .entrar-ou-registrar {
+  padding: 0 0 16px 0;
+}
+
+.entrar-ou-registrar span {
+  font-family: "Fira Sans";
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.login-register input {
+  width: 90%;
+  margin: 4px auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-register .inputs {
+  margin-top: 14px;
+}
+
+.login-register .buttons {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: 0 auto;
+
+  margin-top: 32px;
+}
+
+.login-register .or {
+  opacity: 0.6;
+  margin: 4px;
+  font-size: 14px;
+}
+
+#faq {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-faq {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section-title {
+  font-size: 48px;
+  margin: 32px 0;
+  font-family: "Fira Sans";
+  font-weight: 700;
+}
+
+.faq {
+  margin: 32px 0;
+  border: 1px var(--primary) solid;
+  border-radius: 8px;
+  max-width: 75%;
+}
+
+.faq .faq-question {
+  font-family: "PT Sans";
+  color: white;
+  font-weight: bold;
+  font-size: 24px;
+  background-color: var(--primary);
+  padding: 16px 32px;
+  border-radius: 8px 8px 0 0;
+}
+
+.faq .faq-answer {
+  font-size: 18px;
+  padding: 24px 32px;
+  font-family: "Fira Sans";
+}
+
+footer {
+  margin-top: 16px;
+  padding: 16px;
+  box-shadow: 5px 5px 10px 10px #d4d4d4;
+  font-family: "Reddit Mono";
+}
+
+.credits p {
+  text-align: center;
+}
+
+.flex-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
