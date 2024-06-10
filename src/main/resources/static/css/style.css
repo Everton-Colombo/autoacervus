@@ -77,6 +77,15 @@ button:hover {
   color: var(--primary);
 }
 
+.alert {
+  font-family: "PT Sans";
+  margin: 4px 0;
+}
+
+.alert-error {
+  color: red;
+}
+
 .logo {
   display: flex;
   align-items: center;

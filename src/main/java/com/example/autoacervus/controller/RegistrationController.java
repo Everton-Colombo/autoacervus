@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class RegistrationController {
@@ -22,7 +23,8 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute User user, Model model) {
+    public String register(@RequestParam String username, @RequestParam String password, Model model) {
+        User user = new User(username, password);
         boolean verified = registrationService.verifyUser(user);
         model.addAttribute("createdUser", user);
         model.addAttribute("status", verified ? "Sucesso!" : "Credenciais inválidas");
