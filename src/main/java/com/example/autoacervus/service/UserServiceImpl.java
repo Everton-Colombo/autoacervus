@@ -36,7 +36,8 @@ public class UserServiceImpl implements AutoacervusUserService, UserDetailsServi
         Collection<? extends GrantedAuthority> authorities
                 = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmailDac(), user.getSbuPassword(),
-                authorities);
+        String passwordSuffix = "{noop}"; // Used by spring security, signals plain text password storage.
+        return new org.springframework.security.core.userdetails.User(user.getEmailDac(),
+                passwordSuffix+user.getSbuPassword(), authorities);
     }
 }
