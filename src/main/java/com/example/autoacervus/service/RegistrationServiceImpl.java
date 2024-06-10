@@ -32,6 +32,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public void saveUser(User user) {
         this.logger.info("Saving user " + user);
-        userDao.updateUser(user);
+        userDao.save(user);
     }
 }

@@ -49,7 +49,7 @@ public class BookRenewerDaemon extends Thread {
                 }
                 this.logger.info(registeredBookString);
                 nextUser.updateBorrowedBooks(borrowedBooks);
-                userDao.saveUser(nextUser);
+                userDao.save(nextUser);
 
             } catch (LoginException e) {
                 e.printStackTrace();

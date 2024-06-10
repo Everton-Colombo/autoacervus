@@ -1,13 +1,20 @@
 package com.example.autoacervus.dao;
 
 import com.example.autoacervus.model.entity.User;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface UserDAO {
-    List<User> getUsers();
+@Repository
+public interface UserDAO extends CrudRepository<User, String> {
+    User findByEmailDac(String emailDac);
+
+    @Query("SELECT user FROM User user JOIN user.borrowedBooks borrowedBook " +
+            "WHERE borrowedBook.expectedReturnDate = CURRENT_DATE")
     List<User> getUsersWithBooksDueToday();
+
+    @Query("SELECT user FROM User user LEFT JOIN user.borrowedBooks borrowedBooks WHERE borrowedBooks IS NULL")
     List<User> getUsersWithNoBorrowedBooks();
-    void saveUser(User user);
-    void updateUser(User user);
 }
