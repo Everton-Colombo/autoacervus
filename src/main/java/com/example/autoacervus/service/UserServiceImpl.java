@@ -30,7 +30,7 @@ public class UserServiceImpl implements AutoacervusUserService, UserDetailsServi
         // project's database schema does not comply with such expectations, and thus this function provides a way to
         // map our current database and entity layout to a UserDetails object.
 
-        logger.info("[loadByUsername()]: retriever user by username \"" + username + "\"");
+        logger.info("[loadByUsername()]: retrieve user by username \"" + username + "\"");
         User user = userDAO.findByEmailDac(username);
         if (user == null) {
             logger.warning("Username \"" + username + "\" not found");

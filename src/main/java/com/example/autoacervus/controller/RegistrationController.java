@@ -2,6 +2,8 @@ package com.example.autoacervus.controller;
 
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.service.RegistrationService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +25,7 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String username, @RequestParam String password, Model model) {
+    public String register(HttpServletRequest request, @RequestParam String username, @RequestParam String password, Model model) {
         User user = new User(username, password);
         boolean verified = registrationService.verifyUser(user);
         model.addAttribute("createdUser", user);
@@ -31,6 +33,12 @@ public class RegistrationController {
 
         if (verified) {
             registrationService.saveUser(user);
+
+            try {
+                request.login(username, password);
+            } catch (ServletException e) {
+                e.printStackTrace();
+            }
         }
 
         return "verify";
