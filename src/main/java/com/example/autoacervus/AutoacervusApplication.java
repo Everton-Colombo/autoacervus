@@ -33,21 +33,7 @@ public class AutoacervusApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-//			// Por enquanto, pode-se usar esse bloco de código como uma espécie de função
-//			// main.
-//			AcervusProxy proxy = new AcervusProxyRequests();
-//
-//			User sampleUser = new User("e257234@dac.unicamp.br", "570366");
-//			final boolean hasLoggedIn = proxy.login(sampleUser);
-//			if (!hasLoggedIn) {
-//				this.logger.severe("Failed to log in.");
-//				return;
-//			}
-//			List<BorrowedBook> borrowedBooks = proxy.getBorrowedBooks();
-//			this.logger.info(borrowedBooks.toString());
-//			sampleUser.setBorrowedBooks(borrowedBooks);
-//			proxy.renewBooks(borrowedBooks);
-//			userDAO.updateUser(sampleUser);
+
 		};
 	}
 
