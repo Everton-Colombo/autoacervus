@@ -1,6 +1,6 @@
 package com.example.autoacervus.config;
 
-import com.example.autoacervus.service.UserServiceImpl;
+import com.example.autoacervus.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -31,14 +31,18 @@ public class SpringSecurityConfiguration {
             )
             .formLogin(form ->
                 form
-                        .loginPage("/").loginProcessingUrl("/authenticate").defaultSuccessUrl("/dashboard", true).permitAll()
-            );
+                        .loginPage("/")
+                        .loginProcessingUrl("/authenticate")
+                        .defaultSuccessUrl("/dashboard", true)
+                        .permitAll()
+            )
+            .logout(logout -> logout.permitAll());
 
         return http.build();
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(UserServiceImpl userDetailsService) {
+    public AuthenticationProvider authenticationProvider(UserDetailsServiceImpl userDetailsService) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
@@ -46,9 +50,8 @@ public class SpringSecurityConfiguration {
         return authProvider;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
-
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return NoOpPasswordEncoder.getInstance();
+//    }
 }

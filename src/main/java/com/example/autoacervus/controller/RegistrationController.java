@@ -18,15 +18,10 @@ public class RegistrationController {
     @Autowired
     private RegistrationService registrationService;
 
-    @GetMapping("/register")
-    public String register(Model model) {
-        model.addAttribute("newUser", new User());
-        return "register";
-    }
-
     @PostMapping("/register")
     public String register(HttpServletRequest request, @RequestParam String username, @RequestParam String password, Model model) {
         User user = new User(username, password);
+
         boolean verified = registrationService.verifyUser(user);
         model.addAttribute("createdUser", user);
         model.addAttribute("status", verified ? "Sucesso!" : "Credenciais inválidas");
@@ -34,6 +29,7 @@ public class RegistrationController {
         if (verified) {
             registrationService.saveUser(user);
 
+            // Login after verification:
             try {
                 request.login(username, password);
             } catch (ServletException e) {

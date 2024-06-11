@@ -14,30 +14,34 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.logging.Logger;
 
+/**
+ * The UserDetailsService interface is used by Spring Security to retrieve user authentication credentials. Some
+ * default implementations are provided by spring security. However, since our project structure doesn't match any of
+ * the structures those implementations are pre-configured to expect, this custom implementation must be provided.
+ */
 @Service
-public class UserServiceImpl implements AutoacervusUserService, UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
+    private Logger logger = Logger.getLogger(UserDetailsServiceImpl.class.getName());
 
     @Autowired
     private UserDAO userDAO;
 
-    // From UserDetailsService interface. Used by spring security to do user authentication
+    // When handling authentication, Spring Security manipulates a UserDetails object. By default, Spring is
+    // configured to expect a very specific database schema from which to poll user credentials. However, this
+    // project's database schema does not comply with such expectations, and thus this function provides a way to
+    // map our current database and entity layout to a UserDetails object.
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // When handling authentication, Spring Security manipulates a UserDetails object. By default, Spring is
-        // configured to expect a very specific database schema from which to poll user credentials. However, this
-        // project's database schema does not comply with such expectations, and thus this function provides a way to
-        // map our current database and entity layout to a UserDetails object.
+        logger.info("[loadByUsername()]: retrieving user details by username \"" + username + "\"");
 
-        logger.info("[loadByUsername()]: retrieve user by username \"" + username + "\"");
         User user = userDAO.findByEmailDac(username);
         if (user == null) {
-            logger.warning("Username \"" + username + "\" not found");
-            throw new UsernameNotFoundException(username);
+            logger.warning("[loadByUsername()]: Username \"" + username + "\" not found!");
+            throw new UsernameNotFoundException(username);  // Handled internally by spring security
         }
 
-        // For now, there will only be a single user role.
+        // For now, there will only be a single user role, which all users have.
         Collection<? extends GrantedAuthority> authorities
                 = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
 

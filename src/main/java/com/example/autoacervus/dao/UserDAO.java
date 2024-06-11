@@ -9,7 +9,8 @@ import java.util.List;
 
 @Repository
 public interface UserDAO extends CrudRepository<User, String> {
-    User findByEmailDac(String emailDac);
+
+    User findByEmailDac(String emailDac);   // Automagically implemented by Spring Data JPA
 
     @Query("SELECT user FROM User user JOIN user.borrowedBooks borrowedBook " +
             "WHERE borrowedBook.expectedReturnDate = CURRENT_DATE")
