@@ -62,7 +62,7 @@
             </p>
           </div>
 
-          <form action="#" class="login-register" th:object="${newUser}" method="post">
+          <form action="#" class="login-register" method="POST" th:action="@{/authenticate}">
             <span class="entrar-ou-registrar">
               <span class="primary-color">Entrar</span><span> ou </span
               ><span class="primary-color">Registrar</span>
@@ -70,8 +70,12 @@
             </span>
 
             <div class="inputs">
-              <input type="email" required="true" placeholder="e-mail DAC" th:field="*{emailDac}" />
-              <input type="password" required="true" placeholder="Senha SBU" th:field="*{sbuPassword}" />
+              <input type="email" required="true" placeholder="E-mail DAC" th:value="${username}" th:name="username"/>
+              <input type="password" required="true" placeholder="Senha SBU" th:value="${password}" th:name="password"/>
+            </div>
+
+            <div th:if="${param.error}" class="alert alert-error">
+              Credenciais inválidas.
             </div>
 
             <div class="buttons">
@@ -79,7 +83,7 @@
                 Registrar Agora!
               </button>
               <span class="or">- ou -</span>
-              <button type="button" class="hollow">Entrar</button>
+              <button type="submit" th:formaction="@{/authenticate}" class="hollow">Entrar</button>
             </div>
           </form>
         </div>

@@ -10,7 +10,11 @@ public class HomeAndInfoController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("newUser", new User());
+        // Done like this instead of adding a User object to the model so that the form for registering can be the same
+        // form for logging in
+        model.addAttribute("username", "");
+        model.addAttribute("password", "");
+
         return "index";
     }
 }

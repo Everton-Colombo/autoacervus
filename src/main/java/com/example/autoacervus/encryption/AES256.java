@@ -1,4 +1,4 @@
-package com.example.autoacervus.security;
+package com.example.autoacervus.encryption;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

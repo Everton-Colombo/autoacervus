@@ -15,10 +15,9 @@ public class BorrowedBook {
     @JoinColumn(name = "borrower")
     private User borrower;
 
-
-    // Os atributos a seguir referem-se aos atributos "código" e "códigoRegistro" especificados nos JSONs da API interna
-    // do acervus. Pouco se sabe sobre a diferença entre os dois, mas pelo menos um deles é utilizado com identificador
-    // nas operações dessa API.
+    // The following attributes, code and registryCode, correspond with the fields "código" and "códigoRegistro", which
+    // are present in the json responses of acervus' internal api. Little is known about them and about the differences
+    // between them, but at least one of them is used as an internal id by the api.
     @Id
     @Column(name = "code")
     private int code;
@@ -128,7 +127,7 @@ public class BorrowedBook {
     }
 }
 
-// Classe de ID, requerida pelo Hibernate
+// ID class, required by the ORM libraries
 class BorrowedBookId implements Serializable {
     private User borrower;
     private int code;
