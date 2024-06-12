@@ -316,8 +316,8 @@ footer {
 
   min-height: 20vh;
   width: 600px;
-  text-wrap: nowrap;
-  overflow: clip;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
   background-color: black;
   border: #888 solid 2px;
