@@ -298,6 +298,14 @@ public class AcervusProxyRequests implements AcervusProxy {
 
   @Override
   public List<BorrowedBook> renewBooksDueToday() throws LoginException {
-    return null;
+    List<BorrowedBook> booksDueToday = new LinkedList<>();
+    for (BorrowedBook book : this.getBorrowedBooks()) {
+      if (book.getExpectedReturnDate().isEqual(LocalDate.now())) {
+        booksDueToday.add(book);
+      }
+    }
+
+    this.renewBooks(booksDueToday);
+    return booksDueToday;
   }
 }
