@@ -9,83 +9,6 @@
   --secondary-light: #85DCFF;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  color: black;
-}
-
-html {
-  min-height: 100%;
-  position: relative;
-  scroll-behavior: smooth;
-}
-
-ul {
-  list-style: none;
-}
-
-a {
-  color: black;
-  text-decoration: none;
-}
-
-input {
-  border-color: var(--primary);
-  border-radius: 4px;
-  border-width: 1px;
-  padding: 8px 1rem;
-  font-size: 16px;
-  letter-spacing: normal;
-  line-height: 1.15;
-  font-family: "Fira Sans";
-}
-
-button.filled {
-  background-color: var(--primary);
-  color: white;
-  
-}
-
-button.hollow {
-  background-color: white;
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-button {
-  font-weight: 600;
-  font-size: 16px;
-  border-radius: 4px;
-  padding: 8px 32px;
-  text-align: center;
-  border-width: 1px;
-  line-height: 1.15;
-}
-
-button:hover {
-  /*opacity: 0.75;*/
-  /*background-color: var(--primary-light);*/
-  border-color: black;
-  border-width: 3px;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.primary-color {
-  color: var(--primary);
-}
-
-.alert {
-  font-family: "PT Sans";
-  margin: 4px 0;
-}
-
-.alert-error {
-  color: red;
-}
-
 .logo {
   display: flex;
   align-items: center;
@@ -168,12 +91,28 @@ button:hover {
   height: 100%;
 }
 
+.card {
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+  /* width: 60%; */
+  max-width: 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* border: black 1px solid; */
+  border-radius: 8px;
+  background-color: whitesmoke;
+  padding: 24px;
+}
+
 #login-card {
   width: 60%;
   max-width: 1000px;
   background-color: whitesmoke;
 
-  border: black 1px solid;
+  /*border: black 1px solid;*/
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   border-radius: 8px;
   padding: 24px;
   display: flex;
@@ -221,6 +160,7 @@ button:hover {
   background-color: rgb(235, 235, 235);
   border-radius: 8px;
   border: #ddd solid 1px;
+  /*box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;*/
 }
 
 .login-register .entrar-ou-registrar {
@@ -310,6 +250,7 @@ button:hover {
 }
 
 footer {
+  background-color: whitesmoke;
   margin-top: 16px;
   padding: 16px;
   box-shadow: 5px 5px 10px 10px #d4d4d4;
@@ -320,9 +261,215 @@ footer {
   text-align: center;
 }
 
+.loading-heading {
+  font-family: "Fira Sans";
+  font-size: 24px;
+}
+
+.loading-heading img {
+  margin-left: 16px;
+  width: 42px;
+}
+
+.loading-line {
+  margin: 0 8px;
+  display: flex;
+}
+
+.loading-line h3 {
+  font-family: "Reddit Mono";
+  font-size: 16px;
+  font-weight: 400;
+  margin-right: 0px;
+}
+
+.loading-line img {
+  width: 42px;
+}
+
+#verfiy-card {
+  align-items: center;
+  justify-content: center;
+}
+
+#verify-card .loading-heading {
+  margin-bottom: 24px;
+}
+
+#verify-card #actions {
+  padding: 8px;
+  margin-top: 16px;
+
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+#actions a {
+  width: 33%;
+}
+
+.terminal {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+  min-height: 20vh;
+  width: 600px;
+  text-wrap: nowrap;
+  overflow: clip;
+  text-overflow: ellipsis;
+  background-color: black;
+  border: #888 solid 2px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding: 12px 16px;
+}
+
+.terminal p {
+  color: #cdcdcd;
+  font-family: "Reddit Mono";
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.terminal p::before {
+  content: "> ";
+}
+
+.terminal ul {
+  text-indent: 32px;
+  font-family: "Reddit Mono";
+  font-size: 14px;
+}
+
+.terminal ul li {
+  color: #cdcdcd;
+}
+
+.terminal ul li::before {
+  content: "- ";
+}
+
+
+.success {
+  color: limegreen;
+}
+
+.fail {
+  color: red;
+}
+
+.inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .flex-line {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  color: black;
+}
+
+html {
+  min-height: 100%;
+  position: relative;
+  scroll-behavior: smooth;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+input {
+  border-color: var(--primary);
+  border-radius: 4px;
+  border-width: 1px;
+  padding: 8px 1rem;
+  font-size: 16px;
+  letter-spacing: normal;
+  line-height: 1.15;
+  font-family: "Fira Sans";
+}
+
+.filled {
+  background-color: var(--primary);
+  color: white;
+
+}
+
+.hollow {
+  background-color: white;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+button, a.btn {
+  font-family: "Fira Sans";
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 4px;
+  padding: 8px 32px;
+  text-align: center;
+  border-width: 1px;
+  line-height: 1.15;
+}
+
+button:hover, a.btn:hover {
+  /*opacity: 0.75;*/
+  /*background-color: var(--primary-light);*/
+  border-color: black;
+  border-width: 3px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.primary-color {
+  color: var(--primary);
+}
+
+.ws-color {
+  color: whitesmoke;
+}
+
+.magenta-color {
+  color: magenta;
+}
+
+.alert {
+  font-family: "PT Sans";
+  margin: 4px 0;
+}
+
+.alert-error {
+  color: red;
+}
+
+p {
+  font-family: "PT Sans";
+}
+
+#actions.htmx-indicator {
+  transition: none;
+  opacity: 1;
+}
+
+#actions.htmx-indicator.htmx-request {
+  opacity: 0;
 }

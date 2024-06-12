@@ -14,28 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class RegistrationController {
-
-    @Autowired
-    private RegistrationService registrationService;
-
     @PostMapping("/register")
     public String register(HttpServletRequest request, @RequestParam String username, @RequestParam String password, Model model) {
-        User user = new User(username, password);
-
-        boolean verified = registrationService.verifyUser(user);
-        model.addAttribute("createdUser", user);
-        model.addAttribute("status", verified ? "Sucesso!" : "Credenciais inválidas");
-
-        if (verified) {
-            registrationService.saveUser(user);
-
-            // Login after verification:
-            try {
-                request.login(username, password);
-            } catch (ServletException e) {
-                e.printStackTrace();
-            }
-        }
+        model.addAttribute("username", username);
+        model.addAttribute("password", password);
 
         return "verify";
     }
