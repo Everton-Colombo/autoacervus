@@ -128,7 +128,7 @@ button:hover {
   z-index: 100;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   box-shadow: 5px 5px 10px 0px #d4d4d4;
   background-color: white;
   width: 100%;
@@ -284,7 +284,7 @@ button:hover {
   margin: 32px 0;
   border: 1px var(--primary) solid;
   border-radius: 8px;
-  max-width: 75%;
+  max-width: 60%;
 }
 
 .faq .faq-question {
@@ -299,8 +299,14 @@ button:hover {
 
 .faq .faq-answer {
   font-size: 18px;
-  padding: 24px 32px;
+  padding: 24px 32px 0 32px;
   font-family: "Fira Sans";
+}
+
+.faq-answer p {
+  margin-bottom: 16px;
+  text-indent: 40px;
+  text-align: justify;
 }
 
 footer {

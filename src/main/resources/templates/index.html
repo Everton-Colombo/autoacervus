@@ -34,14 +34,6 @@
             </h1>
           </div>
         </a>
-
-        <nav>
-          <ul>
-            <li><a href="#faq">Sobre</a></li>
-            <li><a href="">Contato</a></li>
-            <li><a href="" class="primary-color">Entrar</a></li>
-          </ul>
-        </nav>
       </div>
 
       <div class="content">
@@ -98,11 +90,13 @@
             <p class="faq-question">Como funciona?</p>
             <div class="faq-answer">
               <p>
-                Nosso sistema automaticamente renova os livros dos usuários
-                registrados no dia em que o empréstimo venceria, maximizando o
-                tempo com o qual se pode ficar com um livro emprestado.
+                Todos os dias, nosso sistema checa quais usuários possuem livros que precisam ser devolvidos. Se houver
+                algum, o sistema acessa o site do acervus em nome do usuário e renova esses empréstimos.
               </p>
-              <p>Faze</p>
+              <p>
+                Fazemos isso de modo a maximizar o tempo de empréstimo de cada livro: os empréstimos são apenas renovados
+                no dia em que venceriam.
+              </p>
             </div>
           </div>
 
@@ -110,9 +104,13 @@
             <p class="faq-question">É seguro?</p>
             <div class="faq-answer">
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Doloribus possimus nihil necessitatibus cupiditate? Eum
-                perferendis commodi esse, dicta impedit excepturi!
+                Por conta da naturaza desse serviço, nosso sistema precisa armazenar a senha SBU de seus usuários para
+                pode acessar o site do acervus em seus nomes. Portanto, o sistema não é invulnerável, uma vez que precisa,
+                em algum momento, manipular essa senha sem qualquer criptografia para acessar o site do acervus.
+              </p>
+              <p>
+                Contudo, contamos com o fato de que a senha SBU dos usuários serve para apenas isso: acessar o site do
+                acervus, e nada mais. Por isso, no pior dos casos, as consequencias não seriam muito graves.
               </p>
             </div>
           </div>
@@ -122,33 +120,20 @@
 
     <footer>
       <div class="flex-line">
-        <div class="social">
-          <a target="_blank" href=""
-            ><i class="fab fa-twitter fa-2x"></i
-          ></a>
-          <a
-            target="_blank"
-            href=""
-            ><i class="fab fa-youtube fa-2x"></i
-          ></a>
-        </div>
-
-        <div class="credits">
-          <div class="entry">
-            <span>Everton Romanzini Colombo&nbsp</span>
-            <span>(everton.colombo@students.ic.unicamp.br)</span>
-          </div>
-
-          <div class="entry">
-            <span>Lucas Rodrigues Pimentel &nbsp</span>
-            <span>(lucas.pimentel@students.ic.unicamp.br)</span>
-          </div>
-
-          <div class="entry">
-            <span>Leonardo Henrique Guimarães &nbsp</span>
-            <span>(leonardo.guimaraes@students.ic.unicamp.br)</span>
-          </div>
-        </div>
+          <table class="credits">
+            <tr>
+              <td>Everton Romanzini Colombo&nbsp;</td>
+              <td>(everton.colombo@students.ic.unicamp.br)</td>
+            </tr>
+            <tr>
+              <td>Lucas Rodrigues Pimentel&nbsp;</td>
+              <td>(lucas.pimentel@students.ic.unicamp.br)</td>
+            </tr>
+            <tr>
+              <td>Leonardo Henrique Guimarães&nbsp;</td>
+              <td>(leonardo.guimaraes@students.ic.unicamp.br)</td>
+            </tr>
+          </table>
 
         <p>Projeto final de MC322 1s2024 turma C.</p>
       </div>
