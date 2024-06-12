@@ -1,9 +1,11 @@
 package com.example.autoacervus.service;
 
 import com.example.autoacervus.dao.UserDAO;
+import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.proxy.AcervusProxy;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +35,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     public void saveUser(User user) {
         this.logger.info("Saving user " + user);
         userDao.save(user);
+    }
+
+    @Override
+    public List<BorrowedBook> getBorrowedBooks() {
+        return this.acervusProxy.getBorrowedBooks();
     }
 }

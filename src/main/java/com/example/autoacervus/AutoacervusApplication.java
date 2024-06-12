@@ -21,9 +21,6 @@ import java.util.logging.Logger;
 @EnableAsync
 public class AutoacervusApplication {
 
-	@Autowired
-	private UserDAO userDAO;
-
 	private Logger logger = Logger.getLogger(AutoacervusApplication.class.getName());
 
 	public static void main(String[] args) {

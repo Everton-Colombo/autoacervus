@@ -1,0 +1,13 @@
+<p>
+    <span class="success">Sistema da biblioteca acessado com SUCESSO!</span>
+</p>
+<p>Livros emprestados: <span class="ws-color" th:text="${#lists.size(borrowedBooks)}"/> livros(s)</p>
+<ul th:each="book: ${borrowedBooks}">
+    <li th:text="${book.title}"/>
+</ul>
+<p>
+    <span class="magenta-color">
+    A partir de hoje, seus empréstimos serão renovados
+    automaticamente.
+    </span>
+</p>

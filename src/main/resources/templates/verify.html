@@ -1,22 +1,81 @@
 <!DOCTYPE html>
-<html lang="pt" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify - AutoAcervus</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
-<body>
-<div class="container">
-    <header>
-        <h1>Verificando suas credenciais...</h1>
-    </header>
-    <main>
-        <p><strong>Email:</strong> <span id="email" th:text="${createdUser.emailDac}"></span></p>
-        <p><strong>Senha SBU:</strong> <span id="dac-password" th:text="${createdUser.sbuPassword}"></span></p>
-        <p><strong>Status:</strong> <span id="status" class="status-verifying" th:text="${status}"></span></p>
+<html lang="PT" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script
+      src="https://unpkg.com/htmx.org@1.9.12"
+      integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+      crossorigin="anonymous"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
+      data-tag="font"
+    />
+    <script src="https://kit.fontawesome.com/88bcc146cc.js" crossorigin="anonymous"></script>
+<!--    <link rel="stylesheet" href="./style.css" />-->
+     <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+    <title>Autoacervus - Home</title>
+    <link rel="icon" type="image/x-icon" th:href="@{images/fav.png}" />
+    <div hx-on="htmx:configRequest: event.detail.headers=''; event.detail.headers['Content-Type']='application/x-www-form-urlencoded; charset=UTF-8'"></div>
+  </head>
+
+  <body>
+    <main class="hero">
+      <div class="content">
+        <div id="verify-card" class="card">
+          <div class="loading-heading inline">
+            <h2>Registrando</h2>
+            <!-- <img src="RollingLoading.svg" alt=""/> -->
+          </div>
+
+          <div id="results"
+               th:hx-post="@{/api/verification/verify?username={u}&password={pw}(u=${username}, pw=${password})}"
+               hx-trigger="load"
+               hx-target=".terminal"
+               hx-indicator="#loading, #actions">
+            <div class="loading-line inline">
+              <h3>Aguarde enquanto verificamos seus dados:</h3>
+              <img id="loading" class="htmx-indicator" th:src="@{images/PulseLoading.svg}" alt="" />
+            </div>
+
+            <div class="terminal">
+               <p>Aguardando reposta do servidor...</p>
+            </div>
+          </div>
+
+          <div id="actions" class="htmx-indicator">
+            <a th:href="@{/dashboard}">
+              <button class="filled">Continuar</button>
+            </a>
+          </div>
+        </div>
+      </div>
     </main>
-</div>
-<script src="script.js"></script>
-</body>
+
+    <footer>
+      <div class="flex-line">
+        <table class="credits">
+          <tr>
+            <td>Everton Romanzini Colombo&nbsp;</td>
+            <td>(everton.colombo@students.ic.unicamp.br)</td>
+          </tr>
+          <tr>
+            <td>Lucas Rodrigues Pimentel&nbsp;</td>
+            <td>(lucas.pimentel@students.ic.unicamp.br)</td>
+          </tr>
+          <tr>
+            <td>Leonardo Henrique Guimarães&nbsp;</td>
+            <td>(leonardo.guimaraes@students.ic.unicamp.br)</td>
+          </tr>
+        </table>
+
+        <p>Projeto final de MC322 1s2024 turma C.</p>
+      </div>
+    </footer>
+  </body>
 </html>
