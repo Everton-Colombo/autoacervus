@@ -19,9 +19,13 @@ public class User {
             CascadeType.PERSIST, CascadeType.DETACH })
     private List<BorrowedBook> borrowedBooks = new LinkedList<>();
 
+    @Column(name="receiveEmails")
+    private boolean receiveEmails;
+
     public User(String emailDac, String sbuPassword) {
         this.emailDac = emailDac;
         this.sbuPassword = sbuPassword;
+        this.receiveEmails = true;
     }
 
     public User() {
@@ -54,6 +58,14 @@ public class User {
     public void updateBorrowedBooks(Collection<BorrowedBook> borrowedBooks) {
         this.borrowedBooks.clear();
         this.borrowedBooks.addAll(borrowedBooks);
+    }
+
+    public boolean isReceiveEmails() {
+        return receiveEmails;
+    }
+
+    public void setReceiveEmails(boolean receiveEmails) {
+        this.receiveEmails = receiveEmails;
     }
 
     @Override
