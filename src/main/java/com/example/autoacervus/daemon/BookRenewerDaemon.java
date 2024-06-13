@@ -1,66 +1,60 @@
 package com.example.autoacervus.daemon;
 
 import com.example.autoacervus.dao.UserDAO;
-import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
-import com.example.autoacervus.proxy.AcervusProxy;
-import com.example.autoacervus.proxy.AcervusProxyRequests;
 
-import javax.security.auth.login.LoginException;
-import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
-public class BookRenewerDaemon extends Thread {
-    private LinkedBlockingQueue<User> renewalQueue;
-    private AcervusProxy proxy;
-    private UserDAO userDao;
-    private Logger logger = Logger.getLogger(BookRenewerDaemon.class.getName());
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-    public BookRenewerDaemon() {
-        super();
-        this.proxy = new AcervusProxyRequests();
-        // this.userDao = new UserDaoHibernateJpa();
+@Component
+public class BookRenewerDaemon {
+    @Value("${autoacervus.renewalMaxUsersPerThread}")
+    private static int maxThreads;
 
-        renewalQueue = new LinkedBlockingQueue<>(userDao.getUsersWithNoBorrowedBooks());
-    }
+    @Value("${autoacervus.renewalCronExpression}")
+    private static String cronExpression;
 
-    @Override
-    public void run() {
-        while (!renewalQueue.isEmpty()) {
-            User nextUser = renewalQueue.poll();
+    private static UserDAO userDao;
 
+    private static Logger logger = Logger.getLogger(BookRenewerDaemon.class.getName());
+
+    @Scheduled(cron = "#{@bookRenewerDaemon.cronExpression}")
+    public void execute() {
+        LinkedList<Thread> bookRenewerThreads = new LinkedList<Thread>();
+        // Probably faster to use List<User> but this is more consistent with the other
+        // lists' types.
+        LinkedList<User> users = (LinkedList<User>) userDao.getUsersWithBooksDueToday();
+
+        int maxUsersPerThread = users.size() / maxThreads + 1;
+
+        stopLoops: for (int i = 0; i < maxThreads; i++) {
+            LinkedList<User> threadUsers = new LinkedList<User>();
+            for (int j = 0; j < maxUsersPerThread; j++) {
+                int idx = i * maxUsersPerThread + j;
+                if (idx >= users.size()) {
+                    break stopLoops;
+                }
+                threadUsers.add(users.get(idx));
+            }
+            BookRenewerThread thread = new BookRenewerThread(threadUsers);
+            thread.start();
+            bookRenewerThreads.add(thread);
+        }
+
+        // Join all threads (wait for all of them to finish). Not a good idea to join
+        // right after starting them because it would be the same as running them
+        // sequentially.
+        for (Thread thread : bookRenewerThreads) {
             try {
-                proxy.login(nextUser);
-
-                List<BorrowedBook> renewedBooks = proxy.renewBooksDueToday();
-                String borrowedBookString = renewedBooks.isEmpty() ? "No books to renew." : "Renewed books:";
-                for (BorrowedBook book : renewedBooks) {
-                    borrowedBookString += "\n" + book;
-                }
-                this.logger.info(borrowedBookString);
-
-                // Update list of borrowed books; grabs any new entries and updates renewal
-                // dates.
-                List<BorrowedBook> borrowedBooks = proxy.getBorrowedBooks();
-                String registeredBookString = borrowedBooks.isEmpty() ? "No books to register." : "Registered books:";
-                for (BorrowedBook book : borrowedBooks) {
-                    registeredBookString += "\n" + book;
-                }
-                this.logger.info(registeredBookString);
-                nextUser.updateBorrowedBooks(borrowedBooks);
-                userDao.save(nextUser);
-
-            } catch (LoginException e) {
+                thread.join();
+            } catch (InterruptedException e) {
+                logger.warning("Thread interrupted. Exception: " + e.getMessage());
                 e.printStackTrace();
             }
         }
     }
-
-    @Override
-    public void interrupt() {
-        super.interrupt();
-        this.logger.severe("Book renewal daemon interrupted.");
-    }
-
 }

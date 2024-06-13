@@ -78,7 +78,7 @@ public class AcervusProxyRequests implements AcervusProxy {
   }
 
   @SuppressWarnings("deprecation")
-  private void logout() {
+  public void logout() {
     this.logger.info("[Logout] Logging out and clearing previous cookies...");
     this.cookieStore.clear();
     // Forge a logout request to the Acervus API.
