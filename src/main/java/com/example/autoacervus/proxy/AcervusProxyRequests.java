@@ -213,10 +213,10 @@ public class AcervusProxyRequests implements AcervusProxy {
   @SuppressWarnings("deprecation")
   @Override
   public boolean renewBooks(List<BorrowedBook> books) {
-    // endpoint: /emprestimo/renovar, espera-se OK 200, é um post.
-    // payload: array com os livros. resposta:
-    // CirculacaoRenovadaSet -> array com objs -> Resultado == "Empréstimo
-    // renovado."
+    if (books.isEmpty()) {
+      this.logger.warning("[RenewBooks] No books to renew.");
+      return false;
+    }
 
     // Forge a renewal request to the Acervus API.
     JSONArray renewArray = new JSONArray();
