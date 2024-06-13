@@ -18,6 +18,7 @@ services:
       - autoacervus-net
     volumes:
       - ./db:/var/lib/mysql
+      - ./src/main/sql/autoacervus-db-creation_script.sql:/docker-entrypoint-initdb.d/1.sql
   java:
     build:
       context: .

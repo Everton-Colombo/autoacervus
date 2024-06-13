@@ -2,7 +2,7 @@ spring.application.name=autoacervus
 
 # Autoacervus properties
 autoacervus.renewalMaxUsersPerThread=10
-autoacervus.renewalCronExpression=0 2 * * *
+autoacervus.renewalCronExpression=0 2 * * * *
 
 # Datasource properties:
 # spring.jpa.hibernate.ddl-auto=update   # Updates the schema to match the entity classes. Use with caution.

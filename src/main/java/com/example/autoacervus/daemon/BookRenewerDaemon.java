@@ -4,8 +4,10 @@ import com.example.autoacervus.dao.UserDAO;
 import com.example.autoacervus.model.entity.User;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,21 +15,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class BookRenewerDaemon {
     @Value("${autoacervus.renewalMaxUsersPerThread}")
-    private static int maxThreads;
+    private int maxThreads;
 
-    @Value("${autoacervus.renewalCronExpression}")
-    private static String cronExpression;
-
-    private static UserDAO userDao;
+    @Autowired
+    private UserDAO userDao;
 
     private static Logger logger = Logger.getLogger(BookRenewerDaemon.class.getName());
 
-    @Scheduled(cron = "#{@bookRenewerDaemon.cronExpression}")
+    @Scheduled(cron = "${autoacervus.renewalCronExpression}")
     public void execute() {
         LinkedList<Thread> bookRenewerThreads = new LinkedList<Thread>();
-        // Probably faster to use List<User> but this is more consistent with the other
-        // lists' types.
-        LinkedList<User> users = (LinkedList<User>) userDao.getUsersWithBooksDueToday();
+        List<User> users = userDao.getUsersWithNoBorrowedBooks(); // userDao.getUsersWithBooksDueToday();
 
         int maxUsersPerThread = users.size() / maxThreads + 1;
 
@@ -40,7 +38,7 @@ public class BookRenewerDaemon {
                 }
                 threadUsers.add(users.get(idx));
             }
-            BookRenewerThread thread = new BookRenewerThread(threadUsers);
+            BookRenewerThread thread = new BookRenewerThread(threadUsers, this.userDao);
             thread.start();
             bookRenewerThreads.add(thread);
         }

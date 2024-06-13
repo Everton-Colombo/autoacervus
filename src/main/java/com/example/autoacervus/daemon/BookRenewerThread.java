@@ -12,11 +12,13 @@ import com.example.autoacervus.proxy.AcervusProxyRequests;
 public class BookRenewerThread extends Thread {
     private LinkedBlockingQueue<User> renewalQueue;
     private UserDAO userDao;
+
     private Logger logger = Logger.getLogger(BookRenewerThread.class.getName());
 
-    public BookRenewerThread(List<User> users) {
+    public BookRenewerThread(List<User> users, UserDAO userDao) {
         super();
         this.renewalQueue = new LinkedBlockingQueue<User>(users);
+        this.userDao = userDao;
     }
 
     @Override
@@ -50,7 +52,7 @@ public class BookRenewerThread extends Thread {
                 this.logger.info(registeredBookString);
 
                 user.updateBorrowedBooks(borrowedBooks);
-                userDao.save(user);
+                this.userDao.save(user);
             } catch (Exception e) {
                 this.logger.warning(
                         "Failed to renew books due today for user " + user.getEmailDac() +

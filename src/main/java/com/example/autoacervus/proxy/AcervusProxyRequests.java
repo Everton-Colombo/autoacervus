@@ -91,7 +91,7 @@ public class AcervusProxyRequests implements AcervusProxy {
       try (CloseableHttpResponse response = httpClient.execute(get)) {
         final int responseCode = response.getCode();
         if (responseCode != 302) {
-          this.logger.severe("[Logout] HTTP status code is not 302 (received: " + responseCode
+          this.logger.warning("[Logout] HTTP status code is not 302 (received: " + responseCode
               + "). Ignoring, as it seems there is no one logged in.");
         }
       }
@@ -236,11 +236,11 @@ public class AcervusProxyRequests implements AcervusProxy {
       post.setEntity(new StringEntity(renewArray.toString()));
       post.setHeader("Content-Type", "application/json; charset=UTF-8");
 
-      this.logger.info("[RenewBooks] Sending login request with JSON payload...");
+      this.logger.info("[RenewBooks] Sending renew request with JSON payload...");
       try (CloseableHttpResponse response = httpClient.execute(post)) {
         final int responseCode = response.getCode();
         if (responseCode != 200) {
-          this.logger.severe("[RenewBooks] HTTP status code is not 200 (received: " + responseCode + ")");
+          this.logger.warning("[RenewBooks] HTTP status code is not 200 (received: " + responseCode + ")");
           return false;
         }
 
