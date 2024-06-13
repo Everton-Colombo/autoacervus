@@ -1,6 +1,9 @@
 # MySQL Database
 db/
 
+# Files with credentials
+application.properties
+
 # Untracked files
 *.untracked.*
 
