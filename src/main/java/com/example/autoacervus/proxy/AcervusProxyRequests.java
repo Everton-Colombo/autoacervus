@@ -195,8 +195,14 @@ public class AcervusProxyRequests implements AcervusProxy {
 
         for (int i = 0; i < bookArray.length(); i++) {
           JSONObject bookEntry = bookArray.getJSONObject(i);
-          BorrowedBook borrowedBook = new BorrowedBook(this.user, bookEntry.getString("Titulo"),
-              bookEntry.getInt("Codigo"), bookEntry.getInt("CodigoRegistro"), LocalDate.now());
+          int bookCode = bookEntry.getInt("Codigo");
+          int bookRegistryCode = bookEntry.getInt("CodigoRegistro");
+          String bookTitle = bookEntry.getString("Titulo");
+          String dateString = bookEntry.getString("DataDevolucaoPrevista").split("T")[0];
+          LocalDate expectedReturnDate = LocalDate.parse(dateString);
+          BorrowedBook borrowedBook = new BorrowedBook(
+              this.user, bookTitle,
+              bookCode, bookRegistryCode, expectedReturnDate);
           borrowedBooks.add(borrowedBook);
         }
       }
@@ -299,11 +305,14 @@ public class AcervusProxyRequests implements AcervusProxy {
   @Override
   public List<BorrowedBook> renewBooksDueToday() throws LoginException {
     List<BorrowedBook> booksDueToday = new LinkedList<>();
+
     for (BorrowedBook book : this.getBorrowedBooks()) {
-      if (book.getExpectedReturnDate().isEqual(LocalDate.now())) {
+      if (book.getExpectedReturnDate().equals(LocalDate.now())) {
         booksDueToday.add(book);
       }
     }
+
+    System.out.println(booksDueToday);
 
     this.renewBooks(booksDueToday);
     return booksDueToday;
