@@ -14,10 +14,13 @@ public class UserSettings {
     private User user;
 
     @Column(name="receiveEmails")
-    private boolean receiveEmails;
+    private boolean receiveEmails = true;
 
-    public UserSettings() {
-        this.receiveEmails = true;
+    // No-args constructor required by ORM libraries
+    public UserSettings() {}
+
+    public UserSettings(User user) {
+        this.user = user;
     }
 
     public UserSettings(User user, boolean receiveEmails) {
@@ -57,8 +60,7 @@ public class UserSettings {
     @Override
     public String toString() {
         return "UserSettings{" +
-                "user=" + user +
-                ", receiveEmails=" + receiveEmails +
+                "receiveEmails=" + receiveEmails +
                 '}';
     }
 }

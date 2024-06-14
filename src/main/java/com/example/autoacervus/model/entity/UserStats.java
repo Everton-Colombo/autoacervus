@@ -14,14 +14,16 @@ public class UserStats {
     private User user;
 
     @Column(name="renewalCount")
-    private int renewalCount;
+    private int renewalCount = 0;
 
     @Column(name="signupDate")
-    private LocalDate signupDate;
+    private LocalDate signupDate = LocalDate.now();
 
-    public UserStats() {
-        this.renewalCount = 0;
-        this.signupDate = LocalDate.now();
+    // No-args constructor required by ORM libraries
+    public UserStats() {}
+
+    public UserStats(User user) {
+        this.user = user;
     }
 
     public UserStats(User user, int renewalCount, LocalDate signupDate) {
@@ -70,8 +72,7 @@ public class UserStats {
     @Override
     public String toString() {
         return "UserStats{" +
-                "user=" + user +
-                ", renewalCount=" + renewalCount +
+                "renewalCount=" + renewalCount +
                 ", signupDate=" + signupDate +
                 '}';
     }

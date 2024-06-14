@@ -30,7 +30,8 @@ public class User {
     public User(String emailDac, String sbuPassword) {
         this.emailDac = emailDac;
         this.sbuPassword = sbuPassword;
-        this.settings = new UserSettings();
+        this.settings = new UserSettings(this);
+        this.userStats = new UserStats(this);
     }
 
     public User() {
