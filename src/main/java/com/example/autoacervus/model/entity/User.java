@@ -19,13 +19,14 @@ public class User {
             CascadeType.PERSIST, CascadeType.DETACH })
     private List<BorrowedBook> borrowedBooks = new LinkedList<>();
 
-    @Column(name="receiveEmails")
-    private boolean receiveEmails;
+    @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.REFRESH,
+            CascadeType.PERSIST, CascadeType.DETACH })
+    private UserSettings settings;
 
     public User(String emailDac, String sbuPassword) {
         this.emailDac = emailDac;
         this.sbuPassword = sbuPassword;
-        this.receiveEmails = true;
+        this.settings = new UserSettings();
     }
 
     public User() {
@@ -60,12 +61,12 @@ public class User {
         this.borrowedBooks.addAll(borrowedBooks);
     }
 
-    public boolean isReceiveEmails() {
-        return receiveEmails;
+    public UserSettings getSettings() {
+        return settings;
     }
 
-    public void setReceiveEmails(boolean receiveEmails) {
-        this.receiveEmails = receiveEmails;
+    public void setSettings(UserSettings settings) {
+        this.settings = settings;
     }
 
     @Override
