@@ -8,5 +8,5 @@ import java.util.List;
 public interface RegistrationService {
     boolean verifyUser(User user);
     void saveUser(User user);
-    List<BorrowedBook> getBorrowedBooks();  // TODO move this to another service. (responsibility overlap)
+    List<BorrowedBook> getBorrowedBooks();
 }

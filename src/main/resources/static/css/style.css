@@ -63,6 +63,14 @@
   font-family: "PT Sans";
 }
 
+.navbar.dashboard-navbar {
+  justify-content: space-between;
+}
+
+.navbar a img {
+  width: 225px;
+}
+
 .navbar ul {
   display: flex;
   align-items: center;
@@ -353,6 +361,56 @@ footer {
   content: "- ";
 }
 
+.card.titled-card {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin: 8px;
+  padding: 16px;
+}
+
+.card.titled-card .card-title {
+  font-family: "Fira Sans";
+  font-weight: bold
+}
+
+.card.titled-card .card-content {
+  margin-top: 24px;
+  margin-left: 8px;
+}
+
+#dashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 100vh;
+}
+
+#dashboard .card.titled-card {
+  min-height: 15%;
+  width: 50%;
+}
+
+#dashboard .card.titled-card .card-title {
+  font-size: 32px;
+}
+
+#dashboard table {
+  font-family: "PT Sans";
+  border-spacing: 16px 2px;
+}
+
+#dashboard table .label {
+  color: #555;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+#dashboard table .value {
+  font-style: italic;
+}
 
 .success {
   color: limegreen;
@@ -373,6 +431,105 @@ footer {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+}
+
+.checkbox-wrapper-34 {
+  --blue: #0D7EFF;
+  --g08: #E1E5EB;
+  --g04: #848ea1;
+}
+
+.checkbox-wrapper-34 .tgl {
+  display: none;
+}
+.checkbox-wrapper-34 .tgl,
+.checkbox-wrapper-34 .tgl:after,
+.checkbox-wrapper-34 .tgl:before,
+.checkbox-wrapper-34 .tgl *,
+.checkbox-wrapper-34 .tgl *:after,
+.checkbox-wrapper-34 .tgl *:before,
+.checkbox-wrapper-34 .tgl + .tgl-btn {
+  box-sizing: border-box;
+}
+.checkbox-wrapper-34 .tgl::selection,
+.checkbox-wrapper-34 .tgl:after::selection,
+.checkbox-wrapper-34 .tgl:before::selection,
+.checkbox-wrapper-34 .tgl *::selection,
+.checkbox-wrapper-34 .tgl *:after::selection,
+.checkbox-wrapper-34 .tgl *:before::selection,
+.checkbox-wrapper-34 .tgl + .tgl-btn::selection {
+  background: none;
+}
+.checkbox-wrapper-34 .tgl ~ .tgl-btn {
+  outline: 0;
+  display: block;
+  width: 57px;
+  height: 27px;
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  font-size: 12px;
+  font-weight: 400;
+  color: #fff;
+}
+.checkbox-wrapper-34 .tgl ~ .tgl-btn:after,
+.checkbox-wrapper-34 .tgl ~ .tgl-btn:before {
+  position: relative;
+  display: block;
+  content: "";
+  width: 44%;
+  height: 100%;
+}
+.checkbox-wrapper-34 .tgl ~ .tgl-btn:after {
+  left: 0;
+}
+.checkbox-wrapper-34 .tgl ~ .tgl-btn:before {
+  display: inline;
+  position: absolute;
+  top: 7px;
+}
+.checkbox-wrapper-34 .tgl:checked ~ .tgl-btn:after {
+  left: 56.5%;
+}
+
+.checkbox-wrapper-34 .tgl-ios ~ .tgl-btn {
+  background: var(--g08);
+  border-radius: 20rem;
+  padding: 2px;
+  transition: all 0.4s ease;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+.checkbox-wrapper-34 .tgl-ios ~ .tgl-btn:after {
+  border-radius: 2em;
+  background: #fff;
+  transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), padding 0.3s ease, margin 0.3s ease;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+.checkbox-wrapper-34 .tgl-ios ~ .tgl-btn:before {
+  content: "Não";
+  left: 28px;
+  color: var(--g04);
+  transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.checkbox-wrapper-34 .tgl-ios ~ .tgl-btn:active {
+  box-shadow: inset 0 0 0 30px rgba(0, 0, 0, 0.1);
+}
+.checkbox-wrapper-34 .tgl-ios ~ .tgl-btn:active:after {
+  padding-right: 0.4em;
+}
+.checkbox-wrapper-34 .tgl-ios:checked ~ .tgl-btn {
+  background: var(--primary);
+}
+.checkbox-wrapper-34 .tgl-ios:checked ~ .tgl-btn:active {
+  box-shadow: inset 0 0 0 30px rgba(0, 0, 0, 0.1);
+}
+.checkbox-wrapper-34 .tgl-ios:checked ~ .tgl-btn:active:after {
+  margin-left: -0.4em;
+}
+.checkbox-wrapper-34 .tgl-ios:checked ~ .tgl-btn:before {
+  content: "Sim";
+  left: 10px;
+  color: #fff;
 }
 
 * {

@@ -1,12 +1,104 @@
 <!DOCTYPE html>
-<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<html lang="PT" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify - AutoAcervus</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!--    <link rel="stylesheet" href="./style.css" />-->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <title>Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="Component 1.png"/>
 </head>
+
 <body>
-    <h1>DASHBOARD</h1>
+<header>
+    <div class="navbar top dashboard-navbar" id="navbar">
+        <a class="logo-a" th:href="@{/}">
+            <img th:src="@{images/logo-full.svg}"/>
+        </a>
+
+        <nav>
+            <ul>
+                <li><span th:text="${loggedUsername} + ' - '"/> <a th:href="@{/logout}" class="primary-color">Sair</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <section id="dashboard" class="center-content">
+        <div class="card titled-card">
+            <h2 class="card-title">Estatísticas de Uso</h2>
+            <table id="stats-table" class="card-content">
+                <tr>
+                    <td class="label">Data de registro:</td>
+                    <td class="value" th:text="${signupDate}"/>
+                </tr>
+
+                <tr>
+                    <td class="label">Livros renovados pelo autoacervus:</td>
+                    <td class="value" th:text="${renewedBookCount}"/>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card titled-card">
+            <h2 class="card-title">Configurações</h2>
+            <table id="settings-table" class="card-content">
+                <form th:object="${userSettings}" th:action="@{/userSettings}" th:method="PUT">
+                    <tr>
+                        <td class="label">Receber e-mails do autoacervus:</td>
+                        <td class="value">
+                            <div class="checkbox-wrapper-34">
+                                <input class="tgl tgl-ios" type="checkbox" id="toggle-34"
+                                       th:checked="${userSettings.receiveEmails}"
+                                       th:field="*{receiveEmails}"
+                                       onchange="setTimeout(() => {this.form.submit();}, 500) ">
+                                <label class='tgl-btn' for='toggle-34'></label>
+                            </div>
+<!--                            <input type="checkbox" th:checked="${userSettings.receiveEmails}" th:field="*{receiveEmails}">-->
+<!--                            <input type="submit">-->
+                        </td>
+                    </tr>
+                </form>
+
+                <tr>
+                    <td class="label">Remover minha conta do autoacervus:</td>
+                    <td class="value">
+                        <form th:method="DELETE" th:action="@{/user}">
+                            <button type="submit"
+                                    class="btn filled"
+                                    onclick="return confirm('Tem certeza de que quer remover sua conta do autocervus?\n(seus empréstimos deixarão de ser renovados automaticamente)');">
+                                Remover
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="flex-line">
+        <table class="credits">
+            <tr>
+                <td>Everton Romanzini Colombo&nbsp;</td>
+                <td>(everton.colombo@students.ic.unicamp.br)</td>
+            </tr>
+            <tr>
+                <td>Lucas Rodrigues Pimentel&nbsp;</td>
+                <td>(lucas.pimentel@students.ic.unicamp.br)</td>
+            </tr>
+            <tr>
+                <td>Leonardo Henrique Guimarães&nbsp;</td>
+                <td>(leonardo.guimaraes@students.ic.unicamp.br)</td>
+            </tr>
+        </table>
+
+        <p>Projeto final de MC322 1s2024 turma C.</p>
+    </div>
+</footer>
 </body>
 </html>
