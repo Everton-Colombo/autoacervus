@@ -29,6 +29,8 @@ public class SpringSecurityConfiguration {
                         .requestMatchers("/register").permitAll()
                         .requestMatchers("/verify").permitAll()
                         .requestMatchers("/dashboard").hasRole("USER")
+                        .requestMatchers("/user").hasRole("USER")
+                        .requestMatchers("/userSettings").hasRole("USER")
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/verify").permitAll()
             )
@@ -53,9 +55,4 @@ public class SpringSecurityConfiguration {
 
         return authProvider;
     }
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return NoOpPasswordEncoder.getInstance();
-//    }
 }

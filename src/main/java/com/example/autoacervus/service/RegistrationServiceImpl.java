@@ -41,4 +41,9 @@ public class RegistrationServiceImpl implements RegistrationService {
     public List<BorrowedBook> getBorrowedBooks() {
         return this.acervusProxy.getBorrowedBooks();
     }
+
+    @Override
+    public boolean userExists(String username) {
+        return userDao.existsById(username);
+    }
 }

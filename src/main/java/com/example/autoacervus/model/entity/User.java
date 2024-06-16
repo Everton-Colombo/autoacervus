@@ -19,9 +19,19 @@ public class User {
             CascadeType.PERSIST, CascadeType.DETACH })
     private List<BorrowedBook> borrowedBooks = new LinkedList<>();
 
+    @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.REFRESH,
+            CascadeType.PERSIST, CascadeType.DETACH })
+    private UserSettings settings;
+
+    @OneToOne(mappedBy = "user", orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.REFRESH,
+            CascadeType.PERSIST, CascadeType.DETACH })
+    private UserStats userStats;
+
     public User(String emailDac, String sbuPassword) {
         this.emailDac = emailDac;
         this.sbuPassword = sbuPassword;
+        this.settings = new UserSettings(this);
+        this.userStats = new UserStats(this);
     }
 
     public User() {
@@ -56,6 +66,22 @@ public class User {
         this.borrowedBooks.addAll(borrowedBooks);
     }
 
+    public UserSettings getSettings() {
+        return settings;
+    }
+
+    public void setSettings(UserSettings settings) {
+        this.settings = settings;
+    }
+
+    public UserStats getUserStats() {
+        return userStats;
+    }
+
+    public void setUserStats(UserStats userStats) {
+        this.userStats = userStats;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -75,8 +101,10 @@ public class User {
     public String toString() {
         return "User{" +
                 "emailDac='" + emailDac + '\'' +
-                ", borrowedBooks=" + borrowedBooks +
                 ", sbuPassword='" + sbuPassword + '\'' +
+                ", borrowedBooks=" + borrowedBooks +
+                ", settings=" + settings +
+                ", userStats=" + userStats +
                 '}';
     }
 }

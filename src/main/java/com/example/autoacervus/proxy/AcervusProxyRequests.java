@@ -301,7 +301,7 @@ public class AcervusProxyRequests implements AcervusProxy {
     List<BorrowedBook> booksDueToday = new LinkedList<>();
     for (BorrowedBook book : this.getBorrowedBooks()) {
       if (book.getExpectedReturnDate().isEqual(LocalDate.now())) {
-        booksDueToday.add(book);
+        boolean renewed = booksDueToday.add(book);
       }
     }
 
