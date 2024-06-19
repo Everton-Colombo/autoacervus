@@ -62,8 +62,7 @@ public class User {
     }
 
     public void updateBorrowedBooks(Collection<BorrowedBook> borrowedBooks) {
-        this.borrowedBooks.clear();
-        this.borrowedBooks.addAll(borrowedBooks);
+        this.borrowedBooks = new LinkedList<>(borrowedBooks);
     }
 
     public UserSettings getSettings() {

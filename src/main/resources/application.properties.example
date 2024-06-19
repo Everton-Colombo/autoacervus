@@ -1,5 +1,9 @@
 spring.application.name=autoacervus
 
+# Autoacervus properties
+autoacervus.renewalMaxUsersPerThread=10
+autoacervus.renewalCronExpression=0 2 * * * *
+
 # Enables forms to perform requests with PUT and DELETE methods
 spring.mvc.hiddenmethod.filter.enabled=true
 

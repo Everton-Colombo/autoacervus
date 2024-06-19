@@ -78,7 +78,7 @@ public class AcervusProxyRequests implements AcervusProxy {
   }
 
   @SuppressWarnings("deprecation")
-  private void logout() {
+  public void logout() {
     this.logger.info("[Logout] Logging out and clearing previous cookies...");
     this.cookieStore.clear();
     // Forge a logout request to the Acervus API.
@@ -91,7 +91,7 @@ public class AcervusProxyRequests implements AcervusProxy {
       try (CloseableHttpResponse response = httpClient.execute(get)) {
         final int responseCode = response.getCode();
         if (responseCode != 302) {
-          this.logger.severe("[Logout] HTTP status code is not 302 (received: " + responseCode
+          this.logger.warning("[Logout] HTTP status code is not 302 (received: " + responseCode
               + "). Ignoring, as it seems there is no one logged in.");
         }
       }
@@ -195,8 +195,14 @@ public class AcervusProxyRequests implements AcervusProxy {
 
         for (int i = 0; i < bookArray.length(); i++) {
           JSONObject bookEntry = bookArray.getJSONObject(i);
-          BorrowedBook borrowedBook = new BorrowedBook(this.user, bookEntry.getString("Titulo"),
-              bookEntry.getInt("Codigo"), bookEntry.getInt("CodigoRegistro"), LocalDate.now());
+          int bookCode = bookEntry.getInt("Codigo");
+          int bookRegistryCode = bookEntry.getInt("CodigoRegistro");
+          String bookTitle = bookEntry.getString("Titulo");
+          String dateString = bookEntry.getString("DataDevolucaoPrevista").split("T")[0];
+          LocalDate expectedReturnDate = LocalDate.parse(dateString);
+          BorrowedBook borrowedBook = new BorrowedBook(
+              this.user, bookTitle,
+              bookCode, bookRegistryCode, expectedReturnDate);
           borrowedBooks.add(borrowedBook);
         }
       }
@@ -213,10 +219,10 @@ public class AcervusProxyRequests implements AcervusProxy {
   @SuppressWarnings("deprecation")
   @Override
   public boolean renewBooks(List<BorrowedBook> books) {
-    // endpoint: /emprestimo/renovar, espera-se OK 200, é um post.
-    // payload: array com os livros. resposta:
-    // CirculacaoRenovadaSet -> array com objs -> Resultado == "Empréstimo
-    // renovado."
+    if (books.isEmpty()) {
+      this.logger.warning("[RenewBooks] No books to renew.");
+      return false;
+    }
 
     // Forge a renewal request to the Acervus API.
     JSONArray renewArray = new JSONArray();
@@ -236,11 +242,11 @@ public class AcervusProxyRequests implements AcervusProxy {
       post.setEntity(new StringEntity(renewArray.toString()));
       post.setHeader("Content-Type", "application/json; charset=UTF-8");
 
-      this.logger.info("[RenewBooks] Sending login request with JSON payload...");
+      this.logger.info("[RenewBooks] Sending renew request with JSON payload...");
       try (CloseableHttpResponse response = httpClient.execute(post)) {
         final int responseCode = response.getCode();
         if (responseCode != 200) {
-          this.logger.severe("[RenewBooks] HTTP status code is not 200 (received: " + responseCode + ")");
+          this.logger.warning("[RenewBooks] HTTP status code is not 200 (received: " + responseCode + ")");
           return false;
         }
 
@@ -299,11 +305,14 @@ public class AcervusProxyRequests implements AcervusProxy {
   @Override
   public List<BorrowedBook> renewBooksDueToday() throws LoginException {
     List<BorrowedBook> booksDueToday = new LinkedList<>();
+
     for (BorrowedBook book : this.getBorrowedBooks()) {
-      if (book.getExpectedReturnDate().isEqual(LocalDate.now())) {
-        boolean renewed = booksDueToday.add(book);
+      if (book.getExpectedReturnDate().equals(LocalDate.now())) {
+        booksDueToday.add(book);
       }
     }
+
+    System.out.println(booksDueToday);
 
     this.renewBooks(booksDueToday);
     return booksDueToday;
