@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap");
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@200..900&display=swap');
 
 :root {
@@ -9,16 +9,80 @@
   --secondary-light: #85DCFF;
 }
 
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  color: black;
+}
+
+html {
+  min-height: 100%;
+  position: relative;
+  scroll-behavior: smooth;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+input {
+  border-color: var(--primary);
+  border-radius: 4px;
+  border-width: 1px;
+  padding: 8px 1rem;
+  font-size: 16px;
+  letter-spacing: normal;
+  line-height: 1.15;
+  font-family: "Fira Sans";
+}
+
+button, a.btn {
+  font-family: "Fira Sans";
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 4px;
+  padding: 8px 32px;
+  text-align: center;
+  border-width: 1px;
+  line-height: 1.15;
+}
+
+button:hover, a.btn:hover {
+  border-color: black;
+  border-width: 3px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Common styles */
+.inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.flex-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .logo {
   display: flex;
   align-items: center;
-  /* justify-content: center; */
   font-size: 0; /* to eliminate space between spans */
 }
 
 .logo img {
-  width: 38px;
-  height: 42px;
+  width: 152px;
+  height: 168px;
 }
 
 .logo h1 {
@@ -59,7 +123,6 @@
   position: fixed;
   top: 0px;
   padding: 0 10%;
-
   font-family: "PT Sans";
 }
 
@@ -73,11 +136,9 @@
   margin: 0 1rem;
   font-size: 24px;
   font-weight: 600;
-  /* text-transform: lowercase; */
 }
 
 .navbar ul li a:hover {
-  /* text-decoration: underline; */
   opacity: 0.8;
   color: var(--primary);
 }
@@ -92,15 +153,11 @@
 }
 
 .card {
-  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; */
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-
-  /* width: 60%; */
   max-width: 60%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* border: black 1px solid; */
   border-radius: 8px;
   background-color: whitesmoke;
   padding: 24px;
@@ -110,8 +167,6 @@
   width: 60%;
   max-width: 1000px;
   background-color: whitesmoke;
-
-  /*border: black 1px solid;*/
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   border-radius: 8px;
   padding: 24px;
@@ -128,10 +183,9 @@
   margin-right: 20px;
 }
 
-
-#logo-info .logo img {
-  scale: 2;
-  margin-right: 24px;
+#logo-info .logo {
+  scale: 3;
+  margin-right: 18px;
 }
 
 #logo-info .logo .logo-heading span {
@@ -149,7 +203,6 @@
 
 .login-register {
   width: 350px;
-  /* height: 300px; */
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -160,7 +213,6 @@
   background-color: rgb(235, 235, 235);
   border-radius: 8px;
   border: #ddd solid 1px;
-  /*box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;*/
 }
 
 .login-register .entrar-ou-registrar {
@@ -189,7 +241,6 @@
   flex-direction: column;
   width: 90%;
   margin: 0 auto;
-
   margin-top: 32px;
 }
 
@@ -254,7 +305,9 @@ footer {
   margin-top: 16px;
   padding: 16px;
   box-shadow: 5px 5px 10px 10px #d4d4d4;
-  font-family: "Reddit Mono";
+  font-family: "Reddit Mono";  
+  
+
 }
 
 .credits p {
@@ -299,7 +352,6 @@ footer {
 #verify-card #actions {
   padding: 8px;
   margin-top: 16px;
-
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -313,7 +365,6 @@ footer {
 
 .terminal {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-
   min-height: 20vh;
   width: 600px;
   white-space: nowrap;
@@ -353,91 +404,12 @@ footer {
   content: "- ";
 }
 
-
 .success {
   color: limegreen;
 }
 
 .fail {
   color: red;
-}
-
-.inline {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.flex-line {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  color: black;
-}
-
-html {
-  min-height: 100%;
-  position: relative;
-  scroll-behavior: smooth;
-}
-
-ul {
-  list-style: none;
-}
-
-a {
-  color: black;
-  text-decoration: none;
-}
-
-input {
-  border-color: var(--primary);
-  border-radius: 4px;
-  border-width: 1px;
-  padding: 8px 1rem;
-  font-size: 16px;
-  letter-spacing: normal;
-  line-height: 1.15;
-  font-family: "Fira Sans";
-}
-
-.filled {
-  background-color: var(--primary);
-  color: white;
-
-}
-
-.hollow {
-  background-color: white;
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-button, a.btn {
-  font-family: "Fira Sans";
-  font-weight: 600;
-  font-size: 16px;
-  border-radius: 4px;
-  padding: 8px 32px;
-  text-align: center;
-  border-width: 1px;
-  line-height: 1.15;
-}
-
-button:hover, a.btn:hover {
-  /*opacity: 0.75;*/
-  /*background-color: var(--primary-light);*/
-  border-color: black;
-  border-width: 3px;
-  text-decoration: underline;
-  cursor: pointer;
 }
 
 .primary-color {
@@ -465,11 +437,327 @@ p {
   font-family: "PT Sans";
 }
 
-#actions.htmx-indicator {
-  transition: none;
-  opacity: 1;
+.filled {
+  background-color: var(--primary);
+  color: white;
 }
 
-#actions.htmx-indicator.htmx-request {
-  opacity: 0;
+.hollow {
+  background-color: white;
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1380px) {
+  .card,
+  .faq {
+    max-width: 80%;
+  }
+  .logo img {
+    width: 114px;
+    height: 126px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .card,
+  .faq {
+    max-width: 80%;
+  }
+  .logo img {
+    width: 114px;
+    height: 126px;
+  }
+  #logo-info .logo {
+    scale: 2.5;
+    
+  }
+}
+
+@media (max-width: 1040px) {
+  .navbar ul li {
+    font-size: 20px;
+  }
+  .login-register {
+    width: 300px;
+  }
+  .login-register .entrar-ou-registrar span {
+    font-size: 20px;
+  }
+  .logo img {
+    width: 132px;
+    height: 147px;
+  }
+  #logo-info .logo {
+    scale: 2;
+    
+  }
+}
+
+@media (max-width: 910px) {
+
+  .flex-line {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .credits {
+    margin-bottom: 16px;
+  }
+
+  .hero .content {
+    padding: 40px 0 40px;
+  }
+  
+  .navbar {
+    padding: 0 5%;
+  }
+  .navbar ul {
+    flex-direction: column;
+  }
+  .navbar ul li {
+    margin: 0.5rem 0;
+  }
+  .hero {
+    height: auto;
+    padding-top: 70px;
+  }
+  #login-card {
+    flex-direction: column;
+    align-items: center;
+  }
+  #login-card #logo-info {
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+  .card,
+  .faq {
+    max-width: 90%;
+  }
+  .logo img {
+    width: 114px;
+    height: 126px;
+  }
+  #logo-info .logo {
+    scale: 3;
+    margin-right: 0px;
+    
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0 5%;
+  }
+  .navbar ul {
+    flex-direction: column;
+  }
+  .navbar ul li {
+    margin: 0.5rem 0;
+  }
+  .hero {
+    height: auto;
+    padding-top: 70px;
+  }
+  #login-card {
+    flex-direction: column;
+    align-items: center;
+  }
+  #login-card #logo-info {
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+  .card,
+  .faq {
+    max-width: 90%;
+  }
+}
+
+@media (max-width: 630px) {
+
+  .navbar ul li {
+    font-size: 18px;
+  }
+
+  .login-register {
+    width: 250px;
+  }
+  .login-register .entrar-ou-registrar span {
+    font-size: 18px;
+  }
+  .section-title {
+    font-size: 36px;
+  }
+  .faq .faq-question {
+    font-size: 20px;
+  }
+  .faq .faq-answer {
+    font-size: 16px;
+    padding: 16px 20px 0 20px;
+  }
+  .terminal {
+    width: 100%;
+    font-size: 12px;   
+  }
+
+  .logo img {
+    width: 114px;
+    height: 126px;
+  }
+  #logo-info .logo {
+    scale: 2.5;
+    
+  }
+
+  footer {
+    font-size: 8px;
+  
+  }
+
+
+}
+
+@media (max-width: 530px) {
+  .navbar {
+    flex-direction: column;
+    padding: 0 2%;
+  }
+
+  .navbar ul {
+    width: 100%;
+    justify-content: center;
+  }
+
+  
+
+  .logo span {
+    font-size: 20px;
+  }
+
+  .hero {
+    height: auto;
+  }
+
+  .card {
+    width: 100%;
+    padding: 16px;
+  }
+
+  #login-card {
+    width: 90%;
+    padding: 16px;
+  }
+
+  
+
+  #logo-info .logo .logo-heading span {
+    font-size: 48px;
+  }
+
+  .login-register {
+    width: 90%;
+  }
+
+  .login-register .entrar-ou-registrar span {
+    font-size: 18px;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+
+  .faq {
+    width: 100%;
+  }
+
+  .faq .faq-question {
+    font-size: 18px;
+  }
+
+  .faq .faq-answer {
+    font-size: 14px;
+  }
+
+  .terminal {
+    width: 100%;
+    font-size: 12px;
+  }
+  .logo img {
+    width: 114px;
+    height: 126px;
+  }
+  #logo-info .logo {
+    scale: 2.5;
+    
+  }
+
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    flex-direction: column;
+    padding: 0 2%;
+  }
+
+  .navbar ul {
+    width: 100%;
+    justify-content: center;
+  }
+
+  
+
+  .logo span {
+    font-size: 20px;
+  }
+
+  .hero {
+    height: auto;
+  }
+
+  .card {
+    width: 100%;
+    padding: 16px;
+  }
+
+  #login-card {
+    width: 90%;
+    padding: 16px;
+  }
+
+  
+
+  #logo-info .logo .logo-heading span {
+    font-size: 48px;
+  }
+
+  .login-register {
+    width: 90%;
+  }
+
+  .login-register .entrar-ou-registrar span {
+    font-size: 18px;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+
+  .faq {
+    width: 100%;
+  }
+
+  .faq .faq-question {
+    font-size: 18px;
+  }
+
+  .faq .faq-answer {
+    font-size: 14px;
+  }
+
+  .terminal {
+    width: 100%;
+    font-size: 12px;
+  }
 }
