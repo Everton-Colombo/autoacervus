@@ -1,6 +1,7 @@
 package com.example.autoacervus.rest;
 
 import com.example.autoacervus.model.entity.User;
+import com.example.autoacervus.service.MailService;
 import com.example.autoacervus.service.RegistrationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,9 @@ public class VerificationApiController {
     RegistrationService registrationService;
 
     @Autowired
+    MailService mailService;
+
+    @Autowired
     private SpringTemplateEngine thymeleafTemplateEngine;
 
     private Logger logger = Logger.getLogger(VerificationApiController.class.getName());
@@ -36,6 +40,7 @@ public class VerificationApiController {
 
         if (verified) {
             registrationService.saveUser(user);
+            mailService.sendHtmlTemplateMail(user.getEmailDac(), "Bem-vindo!", "mail/welcome.html");
 
             // Login after verification:
             try {
