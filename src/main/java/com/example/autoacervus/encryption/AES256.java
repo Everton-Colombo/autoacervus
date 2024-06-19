@@ -14,7 +14,19 @@ public class AES256 {
     private static final int KEY_LENGTH = 256;
     private static final int ITERATION_COUNT = 65536;
 
-    public static String encrypt(String strToEncrypt, String secretKey, String salt) {
+    private static final String secretKey = System.getenv("AES256_SECRET_KEY");
+
+    public static String generateSalt() {
+        SecureRandom secureRandom = new SecureRandom();
+        String salt = "";
+        String charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        for (int i = 0; i < 32; i++) {
+            salt += charset.charAt(secureRandom.nextInt(charset.length()));
+        }
+        return salt;
+    }
+
+    public static String encrypt(String strToEncrypt, String salt) {
         try {
             SecureRandom secureRandom = new SecureRandom();
             byte[] iv = new byte[16];
@@ -42,7 +54,7 @@ public class AES256 {
         }
     }
 
-    public static String decrypt(String strToDecrypt, String secretKey, String salt) {
+    public static String decrypt(String strToDecrypt, String salt) {
         try {
             byte[] encryptedData = Base64.getDecoder().decode(strToDecrypt);
             byte[] iv = new byte[16];

@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @SuppressWarnings("deprecation")
@@ -19,31 +18,27 @@ public class SpringSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(configurer ->
-                configurer
-                        .requestMatchers("/resources/**").permitAll()
-                        .requestMatchers("/static/**").permitAll()
-                        .requestMatchers("/css/**").permitAll()
-                        .requestMatchers("/images/**").permitAll()
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/debugApi/**").permitAll()
-                        .requestMatchers("/register").permitAll()
-                        .requestMatchers("/verify").permitAll()
-                        .requestMatchers("/dashboard").hasRole("USER")
-                        .requestMatchers("/user").hasRole("USER")
-                        .requestMatchers("/userSettings").hasRole("USER")
-                        .requestMatchers("/api/**").permitAll()
-                        .requestMatchers("/verify").permitAll()
-            )
-            .formLogin(form ->
-                form
+        http.authorizeHttpRequests(configurer -> configurer
+                .requestMatchers("/resources/**").permitAll()
+                .requestMatchers("/static/**").permitAll()
+                .requestMatchers("/css/**").permitAll()
+                .requestMatchers("/images/**").permitAll()
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/debugApi/**").permitAll()
+                .requestMatchers("/register").permitAll()
+                .requestMatchers("/verify").permitAll()
+                .requestMatchers("/dashboard").hasRole("USER")
+                .requestMatchers("/user").hasRole("USER")
+                .requestMatchers("/userSettings").hasRole("USER")
+                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/verify").permitAll())
+                .formLogin(form -> form
                         .loginPage("/")
                         .loginProcessingUrl("/authenticate")
                         .defaultSuccessUrl("/dashboard", true)
-                        .permitAll()
-            )
-            .logout(logout -> logout.permitAll())
-            .csrf(AbstractHttpConfigurer::disable);
+                        .permitAll())
+                .logout(logout -> logout.permitAll())
+                .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }

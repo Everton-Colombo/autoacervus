@@ -1,5 +1,7 @@
 package com.example.autoacervus.rest;
 
+import com.example.autoacervus.dao.UserDAO;
+import com.example.autoacervus.encryption.AES256;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.service.MailService;
 import com.example.autoacervus.service.RegistrationService;
@@ -26,39 +28,44 @@ public class VerificationApiController {
     @Autowired
     private SpringTemplateEngine thymeleafTemplateEngine;
 
+    @Autowired
+    private UserDAO userDAO;
+
     private Logger logger = Logger.getLogger(VerificationApiController.class.getName());
 
     @PostMapping("/verify")
     public String verify(HttpServletRequest request, @RequestParam String username, @RequestParam String password) {
-        logger.info("Verify username " + username + ": " + password);
+        logger.info("Verifying username " + username);
 
-        User user = new User(username, password);
+        User user = this.userDAO.findByEmailDac(username);
+        if (user == null) {
+            user = new User(username, password);
+            String salt = AES256.generateSalt();
+            user.setSbuPassword(AES256.encrypt(password, salt));
+            user.setPasswordSalt(salt);
+        }
         boolean verified = registrationService.verifyUser(user);
 
-        String renderedFragment = "";
         Context thymeleafContext = new Context();
 
-        if (verified) {
-            registrationService.saveUser(user);
-            mailService.sendHtmlTemplateMail(user.getEmailDac(), "Bem-vindo!", "mail/welcome.html");
-
-            // Login after verification:
-            try {
-                request.login(username, password);
-            } catch (ServletException e) {
-                logger.severe("COULDNT LOGIN : ServletException: " + e.getMessage());
-                e.printStackTrace();
-            }
-
-            thymeleafContext.setVariables(Map.of("borrowedBooks", registrationService.getBorrowedBooks()));
-            renderedFragment = thymeleafTemplateEngine.process("fragments/terminal-success.html", thymeleafContext);
-        }
-        else {
+        if (!verified) {
             thymeleafContext.setVariables(Map.of("message", "Credenciais inválidas!"));
-            renderedFragment = thymeleafTemplateEngine.process("fragments/terminal-fail.html", thymeleafContext);
+            return thymeleafTemplateEngine.process("fragments/terminal-fail.html", thymeleafContext);
         }
 
-        return renderedFragment;
+        registrationService.saveUser(user);
+        mailService.sendHtmlTemplateMail(user.getEmailDac(), "Bem-vindo!", "mail/welcome.html");
+
+        // Login after verification:
+        try {
+            request.login(username, password);
+        } catch (ServletException e) {
+            logger.severe("COULDNT LOGIN : ServletException: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        thymeleafContext.setVariables(Map.of("borrowedBooks", registrationService.getBorrowedBooks()));
+        return thymeleafTemplateEngine.process("fragments/terminal-success.html", thymeleafContext);
     }
 
 }

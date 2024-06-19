@@ -1,5 +1,6 @@
 package com.example.autoacervus.proxy;
 
+import com.example.autoacervus.encryption.AES256;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 
@@ -44,7 +45,13 @@ public class AcervusProxyRequests implements AcervusProxy {
     // Forge a login request to the Acervus API and save cookies.
     final JSONObject jsonPayload = new JSONObject();
     jsonPayload.put("identificacao", user.getEmailDac());
-    jsonPayload.put("senha", user.getSbuPassword());
+
+    String password = user.getSbuPassword();
+    if (user.getPasswordSalt() != null && !user.getPasswordSalt().isEmpty()) {
+      password = AES256.decrypt(password, user.getPasswordSalt());
+    }
+    jsonPayload.put("senha", password);
+
     try (CloseableHttpClient httpClient = HttpClients.custom()
         .setDefaultCookieStore(cookieStore)
         .build()) {
@@ -135,7 +142,7 @@ public class AcervusProxyRequests implements AcervusProxy {
           return false;
         }
 
-        Boolean isLoggedIn = jsonObject.getBoolean("resultado");
+        boolean isLoggedIn = jsonObject.getBoolean("resultado");
         return isLoggedIn;
       }
     } catch (Exception e) {

@@ -15,6 +15,9 @@ public class User {
     @Column(name = "sbuPassword")
     private String sbuPassword;
 
+    @Column(name = "passwordSalt")
+    private String passwordSalt;
+
     @OneToMany(mappedBy = "borrower", orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.REFRESH,
             CascadeType.PERSIST, CascadeType.DETACH })
     private List<BorrowedBook> borrowedBooks = new LinkedList<>();
@@ -51,6 +54,14 @@ public class User {
 
     public void setSbuPassword(String password) {
         this.sbuPassword = password;
+    }
+
+    public String getPasswordSalt() {
+        return passwordSalt;
+    }
+
+    public void setPasswordSalt(String passwordSalt) {
+        this.passwordSalt = passwordSalt;
     }
 
     public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {

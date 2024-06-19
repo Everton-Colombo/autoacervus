@@ -6,7 +6,6 @@ import com.example.autoacervus.service.DashboardService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +39,7 @@ public class DashboardController {
     }
 
     @DeleteMapping("/user")
-    public String deleteUser(HttpServletRequest request,  Principal principal) {
+    public String deleteUser(HttpServletRequest request, Principal principal) {
         logger.info("[deleteUser()] Deleting user: " + principal.getName());
 
         try {
