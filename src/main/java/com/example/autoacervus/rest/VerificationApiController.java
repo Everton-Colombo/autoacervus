@@ -26,7 +26,7 @@ public class VerificationApiController {
 
     @PostMapping("/verify")
     public String verify(HttpServletRequest request, @RequestParam String username, @RequestParam String password) {
-        logger.info("Very username " + username + ": " + password);
+        logger.info("Verify username " + username + ": " + password);
 
         User user = new User(username, password);
         boolean verified = registrationService.verifyUser(user);
