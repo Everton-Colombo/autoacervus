@@ -1,6 +1,5 @@
 package com.example.autoacervus.controller;
 
-import com.example.autoacervus.dao.UserDAO;
 import com.example.autoacervus.service.RegistrationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +17,6 @@ public class RegistrationController {
     RegistrationService registrationService;
 
     private final Logger logger = Logger.getLogger(RegistrationController.class.getName());
-
-    @Autowired
-    private UserDAO userDao;
 
     @PostMapping("/register")
     public String register(HttpServletRequest request, @RequestParam String username, @RequestParam String password,
