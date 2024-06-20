@@ -1,6 +1,7 @@
 package com.example.autoacervus.daemon;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
 
@@ -9,6 +10,7 @@ import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.proxy.AcervusProxyRequests;
+import com.example.autoacervus.service.MailService;
 
 public class BookRenewerThread extends Thread {
     private LinkedBlockingQueue<User> renewalQueue;
@@ -16,10 +18,13 @@ public class BookRenewerThread extends Thread {
 
     private Logger logger = Logger.getLogger(BookRenewerThread.class.getName());
 
-    public BookRenewerThread(List<User> users, UserDAO userDao) {
+    private MailService mailService;
+
+    public BookRenewerThread(List<User> users, UserDAO userDao, MailService mailService) {
         super();
         this.renewalQueue = new LinkedBlockingQueue<User>(users);
         this.userDao = userDao;
+        this.mailService = mailService;
     }
 
     @Override
@@ -46,7 +51,7 @@ public class BookRenewerThread extends Thread {
                 }
                 this.logger.info("[Thread-" + this.getId() + "] " + renewedString);
 
-                String failedString = renewals.isEmpty()
+                String failedString = failedRenewals.isEmpty()
                         ? "No renewals failed."
                         : "Failed renewals:";
                 for (BorrowedBook book : failedRenewals) {
@@ -75,7 +80,24 @@ public class BookRenewerThread extends Thread {
 
                 user.updateBorrowedBooks(borrowedBooks); // setBorrowedBooks fails because you can't leave a stray list
                                                          // of borrowed books floating around (JPA)
+
                 this.userDao.save(user);
+
+                // Only send email if some renewal happened (or failed to do so) and user wants
+                // to receive emails.
+                if ((renewals.isEmpty() && failedRenewals.isEmpty() && justExceededRenewals.isEmpty()) ||
+                        !user.getSettings().getReceiveEmails()) {
+                    return;
+                }
+
+                mailService.sendHtmlTemplateMail(
+                        user.getEmailDac(),
+                        "Relatóro de renovações",
+                        "mail/renewal_summary.html",
+                        Map.of(
+                                "renewedBooks", renewals,
+                                "notRenewedBooks", failedRenewals,
+                                "lastRenewalBooks", justExceededRenewals));
             } catch (Exception e) {
                 this.logger.warning(
                         "[Thread-" + this.getId() + "] Failed to renew books due today for user " + user.getEmailDac()
