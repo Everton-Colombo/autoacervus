@@ -15,7 +15,7 @@ public abstract class AcervusProxy {
 
     public abstract List<BorrowedBook> getBorrowedBooks();
 
-    public abstract boolean renewBooks(List<BorrowedBook> book);
+    public abstract BookRenewalResult renewBooks(List<BorrowedBook> book);
 
-    public abstract List<BorrowedBook> renewBooksDueToday() throws LoginException;
+    public abstract BookRenewalResult renewBooksDueToday() throws LoginException;
 }

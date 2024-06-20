@@ -26,7 +26,7 @@ import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 
 @Component
-public class AcervusProxyRequests implements AcervusProxy {
+public class AcervusProxyRequests extends AcervusProxy {
   private static final String SUCCESSFULL_RENEWAL_RESULT_MSG = "Empréstimo renovado";
   private static final String FAILED_RENEWAL_RESULT_MSG = "Empréstimo não renovado";
   private static final String LAST_RENEWAL_RESULT_MSG = "Este empréstimo não poderá ser renovado novamente pelo terminal";
