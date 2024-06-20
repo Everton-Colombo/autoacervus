@@ -8,12 +8,14 @@ import javax.security.auth.login.LoginException;
 import java.util.List;
 
 @Component
-public interface AcervusProxy {
-    boolean login(User user) throws LoginException;
+public abstract class AcervusProxy {
+    protected User user;
 
-    List<BorrowedBook> getBorrowedBooks();
+    public abstract boolean login(User user) throws LoginException;
 
-    BookRenewalResult renewBooks(List<BorrowedBook> book);
+    public abstract List<BorrowedBook> getBorrowedBooks();
 
-    BookRenewalResult renewBooksDueToday() throws LoginException;
+    public abstract boolean renewBooks(List<BorrowedBook> book);
+
+    public abstract List<BorrowedBook> renewBooksDueToday() throws LoginException;
 }

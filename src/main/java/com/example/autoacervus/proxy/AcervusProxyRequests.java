@@ -37,8 +37,6 @@ public class AcervusProxyRequests implements AcervusProxy {
   public AcervusProxyRequests() {
   }
 
-  private User user;
-
   @SuppressWarnings("deprecation")
   @Override
   public boolean login(User user) throws LoginException {
