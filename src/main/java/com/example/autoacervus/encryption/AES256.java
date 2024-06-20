@@ -15,8 +15,9 @@ public class AES256 {
     private static final int KEY_LENGTH = 256;
     private static final int ITERATION_COUNT = 65536;
 
-//    private static final String secretKey = System.getenv("AES256_SECRET_KEY");
-    private static final String secretKey = "a57dc85b6ff2826f946afed94a2b648f80401fbc0a0da06cdaa6a13a024003f7a57dc85b6ff2826f946afed94a2b648f80401fbc0a0da06cdaa6a13a024003f7a57dc85b6ff2826f946afed94a2b648f80401fbc0a0da06cdaa6a13a024003f7a57dc85b6ff2826f946afed94a2b648f80401fbc0a0da06cdaa6a13a024003f";
+    private static final String secretKey = System.getenv("AES256_SECRET_KEY").isEmpty()
+            ? "a57dc85b6ff2826f946afed94a2b648f80401fbc0a0da06cdaa6a13a024003f7a57dc85b6ff2826f946afed94a2b648f80401fbc0a0da06cdaa6a13a024003f7a57dc85b6ff2826f946afed94a2b648f80401fbc0a0da06cdaa6a13a024003f7a57dc85b6ff2826f946afed94a2b648f80401fbc0a0da06cdaa6a13a024003f"
+            : System.getenv("AES256_SECRET_KEY");
 
     public static String generateSalt() {
         SecureRandom secureRandom = new SecureRandom();
