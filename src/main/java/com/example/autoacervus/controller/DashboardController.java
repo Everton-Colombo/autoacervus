@@ -3,6 +3,7 @@ package com.example.autoacervus.controller;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.model.entity.UserSettings;
 import com.example.autoacervus.service.DashboardService;
+import com.example.autoacervus.service.MailService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class DashboardController {
 
     @Autowired
     private DashboardService dashboardService;
+
+    @Autowired
+    private MailService mailService;
 
     private final DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final Logger logger = Logger.getLogger(DashboardController.class.getName());
@@ -50,6 +54,8 @@ public class DashboardController {
 
         User toDelete = dashboardService.getLoggedInUser(principal);
         dashboardService.deleteUser(toDelete);
+
+        mailService.sendHtmlTemplateMail(principal.getName(), "Conta removida", "mail/goodbye.html");
 
         return "redirect:/";
     }
