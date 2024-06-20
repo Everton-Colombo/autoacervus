@@ -25,7 +25,13 @@ public class BookRenewerDaemon {
     @Scheduled(cron = "${autoacervus.renewalCronExpression}")
     public void execute() {
         LinkedList<Thread> bookRenewerThreads = new LinkedList<Thread>();
+
         List<User> users = userDao.getUsersWithBooksDueToday();
+
+        if (users.isEmpty()) {
+            logger.info("No users with books due today.");
+            return;
+        }
 
         int maxUsersPerThread = users.size() / maxThreads + 1;
 
