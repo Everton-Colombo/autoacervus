@@ -30,7 +30,6 @@ public class BookRenewerThread extends Thread {
                 this.logger.info("Logging in as " + user.getEmailDac());
 
                 proxy.login(user);
-                // TODO: fix
                 List<BorrowedBook> renewedBooks = proxy.renewBooksDueToday().getSuccessfullyRenewedBooks();
 
                 String borrowedBookString = renewedBooks.isEmpty()

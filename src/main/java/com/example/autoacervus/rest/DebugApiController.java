@@ -6,6 +6,7 @@ import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.proxy.AcervusProxy;
 import com.example.autoacervus.service.MailService;
+import com.example.autoacervus.service.MailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,9 @@ public class DebugApiController {
 
     @Autowired
     private AcervusProxy acervusProxy;
+
+    @Autowired
+    private MailService mailServiceImpl;
 
     @PostMapping("/sendMail")
     public String sendMail() {
@@ -80,6 +84,26 @@ public class DebugApiController {
         System.out.println(result);
         user.setBorrowedBooks(borrowedBooks);
         userDAO.save(user);
+
+        return "done";
+    }
+
+    @GetMapping("sum")
+    public String sum() {
+        User user = userDAO.findByEmailDac("e257234@dac.unicamp.br");
+        try {
+            acervusProxy.login(user);
+        } catch (LoginException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<BorrowedBook> borrowedBooks = acervusProxy.getBorrowedBooks();
+        BookRenewalResult result = acervusProxy.renewBooks(borrowedBooks);
+        System.out.println(result);
+
+        emailService.sendHtmlTemplateMail(user.getEmailDac(), "Relatório de operações",
+                "mail/renewal_summary.html", Map.of("renewedBooks", result.getSuccessfullyRenewedBooks(),
+                        "notRenewedBooks", result.getNotRenewedBooks(), "lastRenewalBooks", result.getRenewalLimitJustExceededBooks()));
 
         return "done";
     }
