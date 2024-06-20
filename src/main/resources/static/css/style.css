@@ -497,6 +497,10 @@ p {
 
 @media (max-width: 910px) {
 
+  .login-register {
+    margin-left: 0px; 
+  }
+
   .flex-line {
     flex-direction: column;
     align-items: center;
