@@ -1,7 +1,10 @@
 package com.example.autoacervus.rest;
 
 import com.example.autoacervus.dao.UserDAO;
+import com.example.autoacervus.model.BookRenewalResult;
+import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
+import com.example.autoacervus.proxy.AcervusProxy;
 import com.example.autoacervus.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.security.auth.login.LoginException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,6 +26,9 @@ public class DebugApiController {
 
     @Autowired
     private UserDAO userDAO;
+
+    @Autowired
+    private AcervusProxy acervusProxy;
 
     @PostMapping("/sendMail")
     public String sendMail() {
@@ -38,6 +46,41 @@ public class DebugApiController {
             System.out.println(user);
         }
 //        System.out.println(userDAO.findAll());
+        return "done";
+    }
+
+    @GetMapping("updateUser")
+    public String updateUser() {
+        User user = userDAO.findByEmailDac("e257234@dac.unicamp.br");
+        try {
+            acervusProxy.login(user);
+        } catch (LoginException e) {
+            throw new RuntimeException(e);
+        }
+
+        user.setBorrowedBooks(acervusProxy.getBorrowedBooks());
+
+        userDAO.save(user);
+
+        return "done";
+    }
+
+    @GetMapping("/testRenewal")
+    public String testRenewal() {
+        User user = userDAO.findByEmailDac("e257234@dac.unicamp.br");
+        try {
+            acervusProxy.login(user);
+        } catch (LoginException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<BorrowedBook> borrowedBooks = acervusProxy.getBorrowedBooks();
+        System.out.println(borrowedBooks);
+        BookRenewalResult result = acervusProxy.renewBooks(borrowedBooks);
+        System.out.println(result);
+        user.setBorrowedBooks(borrowedBooks);
+        userDAO.save(user);
+
         return "done";
     }
 }

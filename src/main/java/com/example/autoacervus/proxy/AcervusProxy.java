@@ -1,5 +1,6 @@
 package com.example.autoacervus.proxy;
 
+import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ public interface AcervusProxy {
 
     List<BorrowedBook> getBorrowedBooks();
 
-    boolean renewBooks(List<BorrowedBook> book);
+    BookRenewalResult renewBooks(List<BorrowedBook> book);
 
-    List<BorrowedBook> renewBooksDueToday() throws LoginException;
+    BookRenewalResult renewBooksDueToday() throws LoginException;
 }

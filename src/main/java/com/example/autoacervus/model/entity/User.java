@@ -59,7 +59,10 @@ public class User {
     }
 
     public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {
-        this.borrowedBooks = borrowedBooks;
+        this.borrowedBooks.clear();
+        if(borrowedBooks != null) {
+            this.borrowedBooks.addAll(borrowedBooks);
+        }
     }
 
     public List<BorrowedBook> getBorrowedBooks() {

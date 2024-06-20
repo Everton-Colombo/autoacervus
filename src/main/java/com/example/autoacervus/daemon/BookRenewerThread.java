@@ -30,7 +30,8 @@ public class BookRenewerThread extends Thread {
                 this.logger.info("Logging in as " + user.getEmailDac());
 
                 proxy.login(user);
-                List<BorrowedBook> renewedBooks = proxy.renewBooksDueToday();
+                // TODO: fix
+                List<BorrowedBook> renewedBooks = proxy.renewBooksDueToday().getSuccessfullyRenewedBooks();
 
                 String borrowedBookString = renewedBooks.isEmpty()
                         ? "No books to renew."
@@ -51,7 +52,7 @@ public class BookRenewerThread extends Thread {
                 }
                 this.logger.info(registeredBookString);
 
-                user.updateBorrowedBooks(borrowedBooks);
+                user.updateBorrowedBooks(borrowedBooks); // TODO: check whether to use updateBorrowedBooks() or setBorrowedBooks()
                 this.userDao.save(user);
             } catch (Exception e) {
                 this.logger.warning(
