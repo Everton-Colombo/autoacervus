@@ -1,7 +1,5 @@
 package com.example.autoacervus.rest;
 
-import com.example.autoacervus.dao.UserDAO;
-import com.example.autoacervus.encryption.AES256;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.service.MailService;
 import com.example.autoacervus.service.RegistrationService;
