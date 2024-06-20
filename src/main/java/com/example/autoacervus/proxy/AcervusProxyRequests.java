@@ -25,14 +25,12 @@ import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 
 @Component
-public class AcervusProxyRequests implements AcervusProxy {
+public class AcervusProxyRequests extends AcervusProxy {
   private final Logger logger = Logger.getLogger(AcervusProxyRequests.class.getName());
   private CookieStore cookieStore = new BasicCookieStore();
 
   public AcervusProxyRequests() {
   }
-
-  private User user;
 
   @SuppressWarnings("deprecation")
   @Override

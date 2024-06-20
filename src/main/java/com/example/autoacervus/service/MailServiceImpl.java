@@ -48,7 +48,6 @@ public class MailServiceImpl implements MailService {
         }
     }
 
-    // TODO: make EmailService an abstract class?
     private void sendHtmlMail(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -63,15 +62,17 @@ public class MailServiceImpl implements MailService {
      *
      * This implementation uses Thymeleaf to render the HTML template.
      *
-     * @param to receiver's email
-     * @param subject email's subject
-     * @param template path to thymeleaf html template
-     * @param templateModel map containing values that will be used to render the html.
+     * @param to            receiver's email
+     * @param subject       email's subject
+     * @param template      path to thymeleaf html template
+     * @param templateModel map containing values that will be used to render the
+     *                      html.
      */
     @Override
     @Async
     public void sendHtmlTemplateMail(String to, String subject, String template, Map<String, Object> templateModel) {
-        logger.info("[sendHtmlTemplateMail()] subject: \"%s\"; template: \"%s\"; to: %s]".formatted(subject, template, to));
+        logger.info(
+                "[sendHtmlTemplateMail()] subject: \"%s\"; template: \"%s\"; to: %s]".formatted(subject, template, to));
 
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
