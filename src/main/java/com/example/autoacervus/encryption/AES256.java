@@ -11,6 +11,7 @@ import java.security.spec.KeySpec;
 import java.util.Base64;
 
 public class AES256 {
+    private static final int SALT_LENGTH = 16;
     private static final int KEY_LENGTH = 256;
     private static final int ITERATION_COUNT = 65536;
 
@@ -20,9 +21,10 @@ public class AES256 {
         SecureRandom secureRandom = new SecureRandom();
         String salt = "";
         String charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < SALT_LENGTH; i++) {
             salt += charset.charAt(secureRandom.nextInt(charset.length()));
         }
+
         return salt;
     }
 
