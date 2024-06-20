@@ -1,13 +1,11 @@
 package com.example.autoacervus.proxy;
 
-import com.example.autoacervus.encryption.AES256;
 import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 
 import javax.security.auth.login.LoginException;
 
-import jdk.swing.interop.SwingInterOpUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -32,7 +30,6 @@ public class AcervusProxyRequests implements AcervusProxy {
   private static final String SUCCESSFULL_RENEWAL_RESULT_MSG = "Empréstimo renovado";
   private static final String FAILED_RENEWAL_RESULT_MSG = "Empréstimo não renovado";
   private static final String LAST_RENEWAL_RESULT_MSG = "Este empréstimo não poderá ser renovado novamente pelo terminal";
-
 
   private final Logger logger = Logger.getLogger(AcervusProxyRequests.class.getName());
   private CookieStore cookieStore = new BasicCookieStore();
@@ -59,7 +56,6 @@ public class AcervusProxyRequests implements AcervusProxy {
     try (CloseableHttpClient httpClient = HttpClients.custom()
         .setDefaultCookieStore(cookieStore)
         .build()) {
-
       HttpPost post = new HttpPost("https://acervus.unicamp.br/login/login");
       post.setEntity(new StringEntity(jsonPayload.toString()));
       post.setHeader("Content-Type", "application/json; charset=UTF-8");
@@ -274,7 +270,6 @@ public class AcervusProxyRequests implements AcervusProxy {
         String result = EntityUtils.toString(entity);
         JSONObject jsonObject = new JSONObject(result);
 
-
         if (!jsonObject.has("CirculacaoRenovadaSet")) {
           this.logger.severe("[RenewBooks] JSON response does not contain 'CirculacaoRenovadaSet' key.");
           return renewalResult;
@@ -297,7 +292,7 @@ public class AcervusProxyRequests implements AcervusProxy {
           notRenewedBooks = jsonObject.getJSONArray("CirculacaoNaoRenovadaSet");
         } catch (Exception e) {
           this.logger.severe(
-                  "[RenewBooks] JSON response does not contain 'CirculacaoNaoRenovadaSet' key or it does not seem to be an array.");
+              "[RenewBooks] JSON response does not contain 'CirculacaoNaoRenovadaSet' key or it does not seem to be an array.");
           return renewalResult;
         }
 
@@ -335,7 +330,7 @@ public class AcervusProxyRequests implements AcervusProxy {
 
           if (!book.has("Resultado")) {
             this.logger
-                    .warning("[RenewBooks] Book \"" + book.getString("Titulo") + "\" does not contain 'Resultado' key.");
+                .warning("[RenewBooks] Book \"" + book.getString("Titulo") + "\" does not contain 'Resultado' key.");
             continue;
           }
 
@@ -344,7 +339,8 @@ public class AcervusProxyRequests implements AcervusProxy {
             continue;
           }
 
-          this.logger.info("[RenewBooks] Book \"" + book.getString("Titulo") + "\" wasn't renewed. Result = " + book.getString("Resultado"));
+          this.logger.info("[RenewBooks] Book \"" + book.getString("Titulo") + "\" wasn't renewed. Result = "
+              + book.getString("Resultado"));
           BorrowedBook notRenewedBook = findBorrowedBookByTitle(books, book.getString("Titulo"));
           notRenewedBook.setCanRenew(false);
           renewalResult.getNotRenewedBooks().add(notRenewedBook);
