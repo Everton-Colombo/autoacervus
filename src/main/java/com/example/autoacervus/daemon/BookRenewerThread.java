@@ -1,13 +1,16 @@
 package com.example.autoacervus.daemon;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Logger;
 
 import com.example.autoacervus.dao.UserDAO;
+import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.proxy.AcervusProxyRequests;
+import com.example.autoacervus.service.MailService;
 
 public class BookRenewerThread extends Thread {
     private LinkedBlockingQueue<User> renewalQueue;
@@ -15,30 +18,54 @@ public class BookRenewerThread extends Thread {
 
     private Logger logger = Logger.getLogger(BookRenewerThread.class.getName());
 
-    public BookRenewerThread(List<User> users, UserDAO userDao) {
+    private MailService mailService;
+
+    public BookRenewerThread(List<User> users, UserDAO userDao, MailService mailService) {
         super();
         this.renewalQueue = new LinkedBlockingQueue<User>(users);
         this.userDao = userDao;
+        this.mailService = mailService;
     }
 
     @Override
     public void run() {
+        this.logger.info("[Thread-" + this.getId() + "] A renewal thread has been fired up!");
         while (!renewalQueue.isEmpty()) {
             User user = renewalQueue.poll();
             AcervusProxyRequests proxy = new AcervusProxyRequests();
             try {
-                this.logger.info("Logging in as " + user.getEmailDac());
+                this.logger.info("[Thread-" + this.getId() + "] Logging in as " + user.getEmailDac());
 
                 proxy.login(user);
-                List<BorrowedBook> renewedBooks = proxy.renewBooksDueToday();
+                BookRenewalResult renewalResult = proxy.renewBooksDueToday();
 
-                String borrowedBookString = renewedBooks.isEmpty()
+                List<BorrowedBook> renewals = renewalResult.getSuccessfullyRenewedBooks();
+                List<BorrowedBook> failedRenewals = renewalResult.getNotRenewedBooks();
+                List<BorrowedBook> justExceededRenewals = renewalResult.getRenewalLimitJustExceededBooks();
+
+                String renewedString = renewals.isEmpty()
                         ? "No books to renew."
                         : "Renewed books:";
-                for (BorrowedBook book : renewedBooks) {
-                    borrowedBookString += "\n- " + book;
+                for (BorrowedBook book : renewals) {
+                    renewedString += "\n- " + book;
                 }
-                this.logger.info(borrowedBookString);
+                this.logger.info("[Thread-" + this.getId() + "] " + renewedString);
+
+                String failedString = failedRenewals.isEmpty()
+                        ? "No renewals failed."
+                        : "Failed renewals:";
+                for (BorrowedBook book : failedRenewals) {
+                    failedString += "\n- " + book;
+                }
+                this.logger.severe("[Thread-" + this.getId() + "] " + failedString);
+
+                String exceededString = justExceededRenewals.isEmpty()
+                        ? "No books have just reached renewal limit."
+                        : "Books that have just reached renewal limit:";
+                for (BorrowedBook book : justExceededRenewals) {
+                    exceededString += "\n- " + book;
+                }
+                this.logger.warning("[Thread-" + this.getId() + "] " + exceededString);
 
                 // Update list of borrowed books; grabs any new entries and updates renewal
                 // dates.
@@ -49,14 +76,32 @@ public class BookRenewerThread extends Thread {
                 for (BorrowedBook book : borrowedBooks) {
                     registeredBookString += "\n" + book;
                 }
-                this.logger.info(registeredBookString);
+                this.logger.info("[Thread-" + this.getId() + "] " + registeredBookString);
 
-                user.updateBorrowedBooks(borrowedBooks);
+                user.updateBorrowedBooks(borrowedBooks); // setBorrowedBooks fails because you can't leave a stray list
+                                                         // of borrowed books floating around (JPA)
+
                 this.userDao.save(user);
+
+                // Only send email if some renewal happened (or failed to do so) and user wants
+                // to receive emails.
+                if ((renewals.isEmpty() && failedRenewals.isEmpty() && justExceededRenewals.isEmpty()) ||
+                        !user.getSettings().getReceiveEmails()) {
+                    return;
+                }
+
+                mailService.sendHtmlTemplateMail(
+                        user.getEmailDac(),
+                        "Relatóro de renovações",
+                        "mail/renewal_summary.html",
+                        Map.of(
+                                "renewedBooks", renewals,
+                                "notRenewedBooks", failedRenewals,
+                                "lastRenewalBooks", justExceededRenewals));
             } catch (Exception e) {
                 this.logger.warning(
-                        "Failed to renew books due today for user " + user.getEmailDac() +
-                                ". Exception:" + e.getMessage());
+                        "[Thread-" + this.getId() + "] Failed to renew books due today for user " + user.getEmailDac()
+                                + ". Exception:" + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -65,6 +110,6 @@ public class BookRenewerThread extends Thread {
     @Override
     public void interrupt() {
         super.interrupt();
-        this.logger.warning("Book renewal thread interrupted.");
+        this.logger.warning("[Thread-" + this.getId() + "] Book renewal thread interrupted.");
     }
 }

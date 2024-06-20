@@ -24,8 +24,8 @@ USE `autoacervus` ;
 DROP TABLE IF EXISTS `autoacervus`.`Users` ;
 
 CREATE TABLE IF NOT EXISTS `autoacervus`.`Users` (
-                                                     `emailDac` VARCHAR(30) NOT NULL,
-    `sbuPassword` VARCHAR(30) NOT NULL,
+    `emailDac` VARCHAR(30) NOT NULL,
+    `password` TEXT NOT NULL,
     PRIMARY KEY (`emailDac`))
     ENGINE = InnoDB;
 
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `autoacervus`.`Users` (
 DROP TABLE IF EXISTS `autoacervus`.`BorrowedBooks` ;
 
 CREATE TABLE IF NOT EXISTS `autoacervus`.`BorrowedBooks` (
-                                                             `borrower` VARCHAR(30) NOT NULL,
+    `borrower` VARCHAR(30) NOT NULL,
     `code` INT NOT NULL,
     `registryCode` INT NOT NULL,
     `title` VARCHAR(255) NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `autoacervus`.`BorrowedBooks` (
 DROP TABLE IF EXISTS `autoacervus`.`UserStats` ;
 
 CREATE TABLE IF NOT EXISTS `autoacervus`.`UserStats` (
-                                                         `user` VARCHAR(30) NOT NULL,
+    `user` VARCHAR(30) NOT NULL,
     `renewalCount` INT NOT NULL,
     `signupDate` DATE NOT NULL,
     PRIMARY KEY (`user`),
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `autoacervus`.`UserStats` (
 DROP TABLE IF EXISTS `autoacervus`.`UserSettings` ;
 
 CREATE TABLE IF NOT EXISTS `autoacervus`.`UserSettings` (
-                                                            `user` VARCHAR(30) NOT NULL,
+    `user` VARCHAR(30) NOT NULL,
     `receiveEmails` TINYINT NOT NULL,
     PRIMARY KEY (`user`),
     INDEX `fk_UserSettings_Users1_idx` (`user` ASC) VISIBLE,

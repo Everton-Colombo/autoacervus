@@ -33,7 +33,7 @@ public class BorrowedBook {
     private LocalDate expectedReturnDate;
 
     @Column(name = "canRenew")
-    private boolean canRenew;
+    private boolean canRenew = true;
 
     // private String callNumber;
     // private String inventoryRegistryNumber;
@@ -83,8 +83,8 @@ public class BorrowedBook {
         this.expectedReturnDate = expectedReturnDate;
     }
 
-    public int canRenew() {
-        return canRenew();
+    public boolean canRenew() {
+        return canRenew;
     }
 
     public void setCanRenew(boolean canRenew) {

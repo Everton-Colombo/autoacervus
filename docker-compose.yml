@@ -29,5 +29,7 @@ services:
       - 8080:8080
     networks:
       - autoacervus-net
+    env_file:
+      - .env
     depends_on:
       - mysql

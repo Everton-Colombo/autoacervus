@@ -2,6 +2,7 @@ package com.example.autoacervus.daemon;
 
 import com.example.autoacervus.dao.UserDAO;
 import com.example.autoacervus.model.entity.User;
+import com.example.autoacervus.service.MailService;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,10 +23,20 @@ public class BookRenewerDaemon {
 
     private static Logger logger = Logger.getLogger(BookRenewerDaemon.class.getName());
 
+    @Autowired
+    private MailService mailService;
+
     @Scheduled(cron = "${autoacervus.renewalCronExpression}")
     public void execute() {
         LinkedList<Thread> bookRenewerThreads = new LinkedList<Thread>();
+
         List<User> users = userDao.getUsersWithBooksDueToday();
+        users.addAll(userDao.getUsersWithNoBorrowedBooks());
+
+        if (users.isEmpty()) {
+            logger.info("No users with books due today.");
+            return;
+        }
 
         int maxUsersPerThread = users.size() / maxThreads + 1;
 
@@ -38,7 +49,7 @@ public class BookRenewerDaemon {
                 }
                 threadUsers.add(users.get(idx));
             }
-            BookRenewerThread thread = new BookRenewerThread(threadUsers, this.userDao);
+            BookRenewerThread thread = new BookRenewerThread(threadUsers, this.userDao, this.mailService);
             thread.start();
             bookRenewerThreads.add(thread);
         }

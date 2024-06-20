@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="PT">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body style="">
+<div style="">
+    <h1 style="font-family:Verdana, Geneva, Tahoma, sans-serif">Relatório de Operação</h1>
+    <div style="margin-left: 2rem; text-align: justify; font-family:'Courier New', Courier, monospace;">
+        <h2>Livros Renovados:</h2>
+        <span th:if="${#lists.isEmpty(renewedBooks)}">(nenhum)</span>
+        <ul th:each="book: ${renewedBooks}">
+            <li th:text="${book.title}" />
+        </ul>
+        <br>
+        <div th:unless="${#lists.isEmpty(notRenewedBooks)}">
+            <h2>Livros não renovados:</h2>
+            <ul th:each="book: ${notRenewedBooks}">
+                <li th:text="${book.title}" />
+            </ul>
+            <br>
+            <span   >
+                Atenção: esses livros não foram renovados! Provavelmente, não é mais possível renová-los virtualemte.
+                Vá até a biblioteca!
+            </span>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(lastRenewalBooks)}">
+            <h1>Livros renovados pela última vez:</h1>
+            <span>
+                Atenção: os seguintes livros atingiram o limite de renovações virtuais. A próxima renovação deverá ser
+                feita presencialmente!
+            </span>
+            <ul th:each="book: ${lastRenewalBooks}">
+                <li th:text="${book.title}" />
+            </ul>
+        </div>
+        <p>- Equipe Autoacervus</p>
+    </div>
+</div>
+</body>
+</html>

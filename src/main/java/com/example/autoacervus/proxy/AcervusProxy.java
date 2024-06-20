@@ -1,5 +1,6 @@
 package com.example.autoacervus.proxy;
 
+import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import org.springframework.stereotype.Component;

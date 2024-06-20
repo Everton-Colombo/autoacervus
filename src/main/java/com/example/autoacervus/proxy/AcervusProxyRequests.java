@@ -1,5 +1,6 @@
 package com.example.autoacervus.proxy;
 
+import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 
@@ -25,7 +26,11 @@ import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 
 @Component
-public class AcervusProxyRequests extends AcervusProxy {
+public class AcervusProxyRequests implements AcervusProxy {
+  private static final String SUCCESSFULL_RENEWAL_RESULT_MSG = "Empréstimo renovado";
+  private static final String FAILED_RENEWAL_RESULT_MSG = "Empréstimo não renovado";
+  private static final String LAST_RENEWAL_RESULT_MSG = "Este empréstimo não poderá ser renovado novamente pelo terminal";
+
   private final Logger logger = Logger.getLogger(AcervusProxyRequests.class.getName());
   private CookieStore cookieStore = new BasicCookieStore();
 
@@ -42,11 +47,13 @@ public class AcervusProxyRequests extends AcervusProxy {
     // Forge a login request to the Acervus API and save cookies.
     final JSONObject jsonPayload = new JSONObject();
     jsonPayload.put("identificacao", user.getEmailDac());
-    jsonPayload.put("senha", user.getSbuPassword());
+
+    String password = user.getSbuPassword();
+    jsonPayload.put("senha", password);
+
     try (CloseableHttpClient httpClient = HttpClients.custom()
         .setDefaultCookieStore(cookieStore)
         .build()) {
-
       HttpPost post = new HttpPost("https://acervus.unicamp.br/login/login");
       post.setEntity(new StringEntity(jsonPayload.toString()));
       post.setHeader("Content-Type", "application/json; charset=UTF-8");
@@ -133,7 +140,7 @@ public class AcervusProxyRequests extends AcervusProxy {
           return false;
         }
 
-        Boolean isLoggedIn = jsonObject.getBoolean("resultado");
+        boolean isLoggedIn = jsonObject.getBoolean("resultado");
         return isLoggedIn;
       }
     } catch (Exception e) {
@@ -216,10 +223,12 @@ public class AcervusProxyRequests extends AcervusProxy {
 
   @SuppressWarnings("deprecation")
   @Override
-  public boolean renewBooks(List<BorrowedBook> books) {
+  public BookRenewalResult renewBooks(List<BorrowedBook> books) {
+    BookRenewalResult renewalResult = new BookRenewalResult();
+
     if (books.isEmpty()) {
       this.logger.warning("[RenewBooks] No books to renew.");
-      return false;
+      return renewalResult;
     }
 
     // Forge a renewal request to the Acervus API.
@@ -245,7 +254,7 @@ public class AcervusProxyRequests extends AcervusProxy {
         final int responseCode = response.getCode();
         if (responseCode != 200) {
           this.logger.warning("[RenewBooks] HTTP status code is not 200 (received: " + responseCode + ")");
-          return false;
+          return renewalResult;
         }
 
         this.logger.info("[RenewBooks] Renew request was successfully accepted. Checking results...");
@@ -253,14 +262,15 @@ public class AcervusProxyRequests extends AcervusProxy {
         HttpEntity entity = response.getEntity();
         if (entity == null) {
           this.logger.severe("[RenewBooks] Response entity is null.");
-          return false;
+          return renewalResult;
         }
 
         String result = EntityUtils.toString(entity);
         JSONObject jsonObject = new JSONObject(result);
+
         if (!jsonObject.has("CirculacaoRenovadaSet")) {
           this.logger.severe("[RenewBooks] JSON response does not contain 'CirculacaoRenovadaSet' key.");
-          return false;
+          return renewalResult;
         }
         JSONArray renewedBooks;
         try {
@@ -268,7 +278,20 @@ public class AcervusProxyRequests extends AcervusProxy {
         } catch (Exception e) {
           this.logger.severe(
               "[RenewBooks] JSON response does not contain 'CirculacaoRenovadaSet' key or it does not seem to be an array.");
-          return false;
+          return renewalResult;
+        }
+
+        if (!jsonObject.has("CirculacaoNaoRenovadaSet")) {
+          this.logger.severe("[RenewBooks] JSON response does not contain 'CirculacaoNaoRenovadaSet' key.");
+          return renewalResult;
+        }
+        JSONArray notRenewedBooks;
+        try {
+          notRenewedBooks = jsonObject.getJSONArray("CirculacaoNaoRenovadaSet");
+        } catch (Exception e) {
+          this.logger.severe(
+              "[RenewBooks] JSON response does not contain 'CirculacaoNaoRenovadaSet' key or it does not seem to be an array.");
+          return renewalResult;
         }
 
         for (int i = 0; i < renewedBooks.length(); i++) {
@@ -283,25 +306,55 @@ public class AcervusProxyRequests extends AcervusProxy {
             continue;
           }
 
-          if (!book.getString("Resultado").equals("Empréstimo renovado.")) {
+          if (!book.getString("Resultado").contains(SUCCESSFULL_RENEWAL_RESULT_MSG)) {
             this.logger.warning("[RenewBooks] Book \"" + book.getString("Titulo") + "\" was not renewed.");
             continue;
           }
 
           this.logger.info("[RenewBooks] Book \"" + book.getString("Titulo") + "\" was successfully renewed.");
+          BorrowedBook renewedBook = findBorrowedBookByTitle(books, book.getString("Titulo"));
+          renewedBook.setCanRenew(!book.getString("Resultado").contains(LAST_RENEWAL_RESULT_MSG));
+          LocalDate newReturnDate = LocalDate.parse(book.getString("DataDevolucaoPrevista").split("T")[0]);
+          renewedBook.setExpectedReturnDate(newReturnDate);
+          renewalResult.getSuccessfullyRenewedBooks().add(renewedBook);
         }
 
-        return true;
+        for (int i = 0; i < notRenewedBooks.length(); i++) {
+          JSONObject book = notRenewedBooks.getJSONObject(i);
+          if (!book.has("Titulo")) {
+            logger.warning("NO TITLE FOUND IN RenewBooks: " + book);
+            continue;
+          }
+
+          if (!book.has("Resultado")) {
+            this.logger
+                .warning("[RenewBooks] Book \"" + book.getString("Titulo") + "\" does not contain 'Resultado' key.");
+            continue;
+          }
+
+          if (!book.getString("Resultado").contains(FAILED_RENEWAL_RESULT_MSG)) {
+            logger.warning("Not contains failed renwal msg: " + book.getString("Resultado"));
+            continue;
+          }
+
+          this.logger.info("[RenewBooks] Book \"" + book.getString("Titulo") + "\" wasn't renewed. Result = "
+              + book.getString("Resultado"));
+          BorrowedBook notRenewedBook = findBorrowedBookByTitle(books, book.getString("Titulo"));
+          notRenewedBook.setCanRenew(false);
+          renewalResult.getNotRenewedBooks().add(notRenewedBook);
+        }
+
+        return renewalResult;
       }
     } catch (Exception e) {
       this.logger.severe("[RenewBooks] Failed to login: " + e.getMessage());
     }
 
-    return false;
+    return renewalResult;
   }
 
   @Override
-  public List<BorrowedBook> renewBooksDueToday() throws LoginException {
+  public BookRenewalResult renewBooksDueToday() throws LoginException {
     List<BorrowedBook> booksDueToday = new LinkedList<>();
 
     for (BorrowedBook book : this.getBorrowedBooks()) {
@@ -309,10 +362,24 @@ public class AcervusProxyRequests extends AcervusProxy {
         booksDueToday.add(book);
       }
     }
+    logger.info("[renewBooksDueToday()] booksDueToday: " + booksDueToday);
 
-    System.out.println(booksDueToday);
+    return this.renewBooks(booksDueToday);
+  }
 
-    this.renewBooks(booksDueToday);
-    return booksDueToday;
+  private BorrowedBook findBorrowedBookByTitle(List<BorrowedBook> books, String title) {
+    for (BorrowedBook book : books) {
+      if (book.getTitle().equals(title)) {
+        return book;
+      }
+    }
+
+    for (BorrowedBook book : books) {
+      if (book.getTitle().contains(title)) {
+        return book;
+      }
+    }
+
+    return null;
   }
 }

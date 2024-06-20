@@ -1,5 +1,6 @@
 package com.example.autoacervus.model.entity;
 
+import com.example.autoacervus.encryption.AES256PasswordEncoder;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -12,8 +13,8 @@ public class User {
     @Column(name = "emailDac")
     private String emailDac;
 
-    @Column(name = "sbuPassword")
-    private String sbuPassword;
+    @Column(name = "password")
+    private String encodededPassword;
 
     @OneToMany(mappedBy = "borrower", orphanRemoval = true, cascade = { CascadeType.MERGE, CascadeType.REFRESH,
             CascadeType.PERSIST, CascadeType.DETACH })
@@ -29,7 +30,7 @@ public class User {
 
     public User(String emailDac, String sbuPassword) {
         this.emailDac = emailDac;
-        this.sbuPassword = sbuPassword;
+        this.encodededPassword = AES256PasswordEncoder.getInstance().encode(sbuPassword);
         this.settings = new UserSettings(this);
         this.userStats = new UserStats(this);
     }
@@ -45,16 +46,23 @@ public class User {
         this.emailDac = email;
     }
 
-    public String getSbuPassword() {
-        return sbuPassword;
+    public String getEncodededPassword() {
+        return encodededPassword;
     }
 
-    public void setSbuPassword(String password) {
-        this.sbuPassword = password;
+    public void setEncodededPassword(String encodededPassword) {
+        this.encodededPassword = encodededPassword;
+    }
+
+    public String getSbuPassword() {
+        return AES256PasswordEncoder.getInstance().decode(this.encodededPassword);
     }
 
     public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {
-        this.borrowedBooks = borrowedBooks;
+        this.borrowedBooks.clear();
+        if(borrowedBooks != null) {
+            this.borrowedBooks.addAll(borrowedBooks);
+        }
     }
 
     public List<BorrowedBook> getBorrowedBooks() {
@@ -100,7 +108,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "emailDac='" + emailDac + '\'' +
-                ", sbuPassword='" + sbuPassword + '\'' +
                 ", borrowedBooks=" + borrowedBooks +
                 ", settings=" + settings +
                 ", userStats=" + userStats +

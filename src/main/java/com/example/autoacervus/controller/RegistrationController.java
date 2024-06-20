@@ -25,7 +25,6 @@ public class RegistrationController {
         if (registrationService.userExists(username)) {
             logger.info("[register()]: User already exists. Attempting to authenticate...");
 
-            // Attempt to manually login:
             try {
                 request.login(username, password);
             } catch (ServletException e) {

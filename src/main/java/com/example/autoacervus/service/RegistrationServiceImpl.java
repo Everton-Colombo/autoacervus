@@ -26,14 +26,14 @@ public class RegistrationServiceImpl implements RegistrationService {
         try {
             return acervusProxy.login(user);
         } catch (Exception e) {
-            this.logger.severe("Could not verify user. Error: " + e.getMessage());
+            this.logger.severe("Could not verify user " + user.getEmailDac() + ". Error: " + e.getMessage());
             return false;
         }
     }
 
     @Override
     public void saveUser(User user) {
-        this.logger.info("Saving user " + user);
+        this.logger.info("Saving user with email " + user.getEmailDac());
         userDao.save(user);
     }
 
