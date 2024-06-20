@@ -6,7 +6,6 @@ import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.proxy.AcervusProxy;
 import com.example.autoacervus.service.MailService;
-import com.example.autoacervus.service.MailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,12 +30,9 @@ public class DebugApiController {
     @Autowired
     private AcervusProxy acervusProxy;
 
-    @Autowired
-    private MailService mailServiceImpl;
-
     @PostMapping("/sendMail")
     public String sendMail() {
-//        emailService.sendSimpleMail("e.rcolombo2@gmail.com", "Teste", "aoba");
+        // emailService.sendSimpleMail("e.rcolombo2@gmail.com", "Teste", "aoba");
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("message", "Hello World");
         emailService.sendHtmlTemplateMail("e.rcolombo2@gmail.com", "Teste", "mail/test-template.html", templateModel);
@@ -49,7 +45,7 @@ public class DebugApiController {
         for (User user : userDAO.findAll()) {
             System.out.println(user);
         }
-//        System.out.println(userDAO.findAll());
+        // System.out.println(userDAO.findAll());
         return "done";
     }
 
@@ -101,9 +97,10 @@ public class DebugApiController {
         BookRenewalResult result = acervusProxy.renewBooks(borrowedBooks);
         System.out.println(result);
 
-        emailService.sendHtmlTemplateMail(user.getEmailDac(), "Relatório de operações",
+        emailService.sendHtmlTemplateMail(user.getEmailDac(), "Relatório de renovações (debug)",
                 "mail/renewal_summary.html", Map.of("renewedBooks", result.getSuccessfullyRenewedBooks(),
-                        "notRenewedBooks", result.getNotRenewedBooks(), "lastRenewalBooks", result.getRenewalLimitJustExceededBooks()));
+                        "notRenewedBooks", result.getNotRenewedBooks(), "lastRenewalBooks",
+                        result.getRenewalLimitJustExceededBooks()));
 
         return "done";
     }
