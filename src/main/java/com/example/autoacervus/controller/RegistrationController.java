@@ -29,10 +29,8 @@ public class RegistrationController {
         if (registrationService.userExists(username)) {
             logger.info("[register()]: User already exists. Attempting to authenticate...");
 
-            String encryptedPassword = userDao.findByEmailDac(username).getSbuPassword();
-
             try {
-                request.login(username, encryptedPassword);
+                request.login(username, password);
             } catch (ServletException e) {
                 logger.severe("[register()]: COULDNT LOGIN : ServletException: " + e.getMessage());
                 if (e.getMessage().equals("Bad credentials")) {

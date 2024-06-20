@@ -28,22 +28,13 @@ public class VerificationApiController {
     @Autowired
     private SpringTemplateEngine thymeleafTemplateEngine;
 
-    @Autowired
-    private UserDAO userDAO;
-
     private Logger logger = Logger.getLogger(VerificationApiController.class.getName());
 
     @PostMapping("/verify")
     public String verify(HttpServletRequest request, @RequestParam String username, @RequestParam String password) {
         logger.info("Verifying username " + username);
 
-        User user = this.userDAO.findByEmailDac(username);
-        if (user == null) {
-            user = new User(username, password);
-            String salt = AES256.generateSalt();
-            user.setSbuPassword(AES256.encrypt(password, salt));
-            user.setPasswordSalt(salt);
-        }
+        User user = new User(username, password);
         boolean verified = registrationService.verifyUser(user);
 
         Context thymeleafContext = new Context();

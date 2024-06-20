@@ -1,5 +1,6 @@
 package com.example.autoacervus.config;
 
+import com.example.autoacervus.encryption.AES256PasswordEncoder;
 import com.example.autoacervus.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,7 +49,7 @@ public class SpringSecurityConfiguration {
     public AuthenticationProvider authenticationProvider(UserDetailsServiceImpl userDetailsService) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        authProvider.setPasswordEncoder(AES256PasswordEncoder.getInstance());
 
         return authProvider;
     }

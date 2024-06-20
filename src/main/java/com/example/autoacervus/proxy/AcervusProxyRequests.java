@@ -47,9 +47,6 @@ public class AcervusProxyRequests implements AcervusProxy {
     jsonPayload.put("identificacao", user.getEmailDac());
 
     String password = user.getSbuPassword();
-    if (user.getPasswordSalt() != null && !user.getPasswordSalt().isEmpty()) {
-      password = AES256.decrypt(password, user.getPasswordSalt());
-    }
     jsonPayload.put("senha", password);
 
     try (CloseableHttpClient httpClient = HttpClients.custom()

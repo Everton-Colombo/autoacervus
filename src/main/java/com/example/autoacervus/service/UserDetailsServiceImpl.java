@@ -53,6 +53,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         logger.info("[loadByUsername()]: Returning user credentials");
         return new org.springframework.security.core.userdetails.User(user.getEmailDac(),
-                user.getSbuPassword(), authorities);
+                user.getEncodededPassword(), authorities);
     }
 }

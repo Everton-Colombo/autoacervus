@@ -25,8 +25,7 @@ DROP TABLE IF EXISTS `autoacervus`.`Users` ;
 
 CREATE TABLE IF NOT EXISTS `autoacervus`.`Users` (
     `emailDac` VARCHAR(30) NOT NULL,
-    `sbuPassword` TEXT NOT NULL,
-    `passwordSalt` VARCHAR(32) NOT NULL,
+    `password` TEXT NOT NULL,
     PRIMARY KEY (`emailDac`))
     ENGINE = InnoDB;
 
