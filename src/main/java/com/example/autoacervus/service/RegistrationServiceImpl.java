@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.LoginException;
+
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
     private Logger logger = Logger.getLogger(RegistrationServiceImpl.class.getName());
@@ -38,7 +40,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public List<BorrowedBook> getBorrowedBooks() {
+    public List<BorrowedBook> getBorrowedBooks() throws LoginException {
         return this.acervusProxy.getBorrowedBooks();
     }
 

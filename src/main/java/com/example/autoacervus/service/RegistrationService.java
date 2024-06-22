@@ -3,6 +3,7 @@ package com.example.autoacervus.service;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 
+import javax.security.auth.login.LoginException;
 import java.util.List;
 
 public interface RegistrationService {
@@ -12,5 +13,5 @@ public interface RegistrationService {
 
     boolean userExists(String username);
 
-    List<BorrowedBook> getBorrowedBooks();
+    List<BorrowedBook> getBorrowedBooks() throws LoginException;
 }

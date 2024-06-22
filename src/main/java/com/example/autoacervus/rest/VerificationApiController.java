@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import javax.security.auth.login.LoginException;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -29,7 +30,7 @@ public class VerificationApiController {
     private Logger logger = Logger.getLogger(VerificationApiController.class.getName());
 
     @PostMapping("/verify")
-    public String verify(HttpServletRequest request, @RequestParam String username, @RequestParam String password) {
+    public String verify(HttpServletRequest request, @RequestParam String username, @RequestParam String password) throws LoginException {
         logger.info("Verifying username " + username);
 
         User user = new User(username, password);
