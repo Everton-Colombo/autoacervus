@@ -88,6 +88,8 @@ public class DebugApiController {
         List<BorrowedBook> borrowedBooks = acervusProxy.getBorrowedBooks();
         BookRenewalResult result = acervusProxy.renewBooks(borrowedBooks);
         System.out.println(result);
+        user.getUserStats().incrementRenewalCount(result.getSuccessfullyRenewedBooks().size());
+        userDAO.save(user);
 
         emailService.sendHtmlTemplateMail(user.getEmailDac(), "Relatório de renovações (debug)",
                 "mail/renewal_summary.html", Map.of("renewedBooks", result.getSuccessfullyRenewedBooks(),

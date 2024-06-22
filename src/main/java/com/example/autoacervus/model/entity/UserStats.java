@@ -40,6 +40,10 @@ public class UserStats {
         this.user = user;
     }
 
+    public void incrementRenewalCount(int amount) {
+        this.renewalCount += amount;
+    }
+
     public int getRenewalCount() {
         return renewalCount;
     }

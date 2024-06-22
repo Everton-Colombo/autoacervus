@@ -80,7 +80,7 @@ public class BookRenewerThread extends Thread {
 
                 user.updateBorrowedBooks(borrowedBooks); // setBorrowedBooks fails because you can't leave a stray list
                                                          // of borrowed books floating around (JPA)
-
+                user.getUserStats().incrementRenewalCount(renewals.size());
                 this.userDao.save(user);
 
                 // Only send email if some renewal happened (or failed to do so) and user wants
