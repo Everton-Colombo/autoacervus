@@ -50,29 +50,24 @@ public class DebugApiController {
     }
 
     @GetMapping("updateUser")
-    public String updateUser() {
+    public String updateUser() throws LoginException {
         User user = userDAO.findByEmailDac("e257234@dac.unicamp.br");
-        try {
-            acervusProxy.login(user);
-        } catch (LoginException e) {
-            throw new RuntimeException(e);
+        if (acervusProxy.login(user)) {
+            user.setBorrowedBooks(acervusProxy.getBorrowedBooks());
+            userDAO.save(user);
+        } else {
+            return "failed to login";
         }
 
-        user.setBorrowedBooks(acervusProxy.getBorrowedBooks());
-
-        userDAO.save(user);
 
         return "done";
     }
 
     @GetMapping("/testRenewal")
-    public String testRenewal() {
+    public String testRenewal() throws LoginException {
         User user = userDAO.findByEmailDac("e257234@dac.unicamp.br");
-        try {
-            acervusProxy.login(user);
-        } catch (LoginException e) {
-            throw new RuntimeException(e);
-        }
+
+        acervusProxy.login(user);
 
         List<BorrowedBook> borrowedBooks = acervusProxy.getBorrowedBooks();
         System.out.println(borrowedBooks);
@@ -85,13 +80,10 @@ public class DebugApiController {
     }
 
     @GetMapping("sum")
-    public String sum() {
+    public String sum() throws LoginException {
         User user = userDAO.findByEmailDac("e257234@dac.unicamp.br");
-        try {
-            acervusProxy.login(user);
-        } catch (LoginException e) {
-            throw new RuntimeException(e);
-        }
+
+        acervusProxy.login(user);
 
         List<BorrowedBook> borrowedBooks = acervusProxy.getBorrowedBooks();
         BookRenewalResult result = acervusProxy.renewBooks(borrowedBooks);

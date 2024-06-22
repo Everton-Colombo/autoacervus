@@ -21,7 +21,7 @@ public class BookRenewerDaemon {
     @Autowired
     private UserDAO userDao;
 
-    private static Logger logger = Logger.getLogger(BookRenewerDaemon.class.getName());
+    private static final Logger logger = Logger.getLogger(BookRenewerDaemon.class.getName());
 
     @Autowired
     private MailService mailService;
@@ -30,11 +30,12 @@ public class BookRenewerDaemon {
     public void execute() {
         LinkedList<Thread> bookRenewerThreads = new LinkedList<Thread>();
 
-        List<User> users = userDao.getUsersWithBooksDueToday();
+        List<User> users = new LinkedList<>();
+        users.addAll(userDao.getUsersWithBooksDueToday());
         users.addAll(userDao.getUsersWithNoBorrowedBooks());
 
         if (users.isEmpty()) {
-            logger.info("No users with books due today.");
+            logger.info("No users to operate upon.");
             return;
         }
 

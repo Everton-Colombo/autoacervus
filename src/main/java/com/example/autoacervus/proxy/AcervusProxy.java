@@ -11,11 +11,12 @@ import java.util.List;
 public abstract class AcervusProxy {
     protected User user;
 
-    public abstract boolean login(User user) throws LoginException;
+    public abstract boolean login(User user);
+    public abstract void logout();
 
-    public abstract List<BorrowedBook> getBorrowedBooks();
+    public abstract List<BorrowedBook> getBorrowedBooks() throws LoginException;
 
-    public abstract BookRenewalResult renewBooks(List<BorrowedBook> book);
+    public abstract BookRenewalResult renewBooks(List<BorrowedBook> books) throws LoginException;
 
     public abstract BookRenewalResult renewBooksDueToday() throws LoginException;
 }
