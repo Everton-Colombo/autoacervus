@@ -1,5 +1,6 @@
 package com.example.autoacervus.service;
 
+import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 
@@ -8,6 +9,8 @@ import java.util.List;
 
 public interface RegistrationService {
     boolean verifyUser(User user);
+
+    BookRenewalResult performFirstRenewal(User user);
 
     void saveUser(User user);
 

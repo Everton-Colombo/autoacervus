@@ -1,5 +1,7 @@
 package com.example.autoacervus.rest;
 
+import com.example.autoacervus.model.BookRenewalResult;
+import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.service.MailService;
 import com.example.autoacervus.service.RegistrationService;
@@ -11,6 +13,7 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import javax.security.auth.login.LoginException;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -31,7 +34,7 @@ public class VerificationApiController {
 
     @PostMapping("/verify")
     public String verify(HttpServletRequest request, @RequestParam String username, @RequestParam String password) throws LoginException {
-        logger.info("Verifying username " + username);
+        logger.info("[verify()] Verifying user " + username);
 
         User user = new User(username, password);
         boolean verified = registrationService.verifyUser(user);
@@ -43,18 +46,31 @@ public class VerificationApiController {
             return thymeleafTemplateEngine.process("fragments/terminal-fail.html", thymeleafContext);
         }
 
-        registrationService.saveUser(user);
         mailService.sendHtmlTemplateMail(user.getEmailDac(), "Bem-vindo!", "mail/welcome.html");
+
+        // Renew any books that are due today, as today's operations have most likely already ended:
+        BookRenewalResult result = registrationService.performFirstRenewal(user);
+        if (!result.getAllBooksRequestedForRenewal().isEmpty()) {
+            user.getUserStats().incrementRenewalCount(result.getSuccessfullyRenewedBooks().size());
+            mailService.sendHtmlTemplateMail(user.getEmailDac(), "Relatório de renovações (debug)",
+                    "mail/renewal_summary.html", Map.of("renewedBooks", result.getSuccessfullyRenewedBooks(),
+                            "notRenewedBooks", result.getNotRenewedBooks(), "lastRenewalBooks",
+                            result.getRenewalLimitJustExceededBooks()));
+        }
+        // Save user details to database
+        List<BorrowedBook> userBooks = registrationService.getBorrowedBooks();
+        user.setBorrowedBooks(userBooks);
+        registrationService.saveUser(user);
 
         // Login after verification:
         try {
             request.login(username, password);
         } catch (ServletException e) {
-            logger.severe("COULDNT LOGIN : ServletException: " + e.getMessage());
+            logger.severe("[verify()] COULDN'T LOGIN : ServletException: " + e.getMessage());
             e.printStackTrace();
         }
 
-        thymeleafContext.setVariables(Map.of("borrowedBooks", registrationService.getBorrowedBooks()));
+        thymeleafContext.setVariables(Map.of("borrowedBooks", userBooks));
         return thymeleafTemplateEngine.process("fragments/terminal-success.html", thymeleafContext);
     }
 

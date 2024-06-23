@@ -1,6 +1,7 @@
 package com.example.autoacervus.service;
 
 import com.example.autoacervus.dao.UserDAO;
+import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import com.example.autoacervus.proxy.AcervusProxy;
@@ -28,15 +29,27 @@ public class RegistrationServiceImpl implements RegistrationService {
         try {
             return acervusProxy.login(user);
         } catch (Exception e) {
-            this.logger.severe("Could not verify user " + user.getEmailDac() + ". Error: " + e.getMessage());
+            this.logger.severe("[verifyUser()] Could not verify user " + user.getEmailDac() + ". Error: " + e.getMessage());
             return false;
         }
     }
 
     @Override
     public void saveUser(User user) {
-        this.logger.info("Saving user with email " + user.getEmailDac());
+        this.logger.info("[saveUser()] Saving user with email " + user.getEmailDac());
         userDao.save(user);
+    }
+
+    @Override
+    public BookRenewalResult performFirstRenewal(User user) {
+        BookRenewalResult result = new BookRenewalResult();
+        try {
+            result = acervusProxy.renewBooksDueToday();
+        } catch (LoginException e) {
+            logger.severe("[performFirstRenewal()] Login exception. Error: " + e.getMessage());
+        }
+
+        return result;
     }
 
     @Override
