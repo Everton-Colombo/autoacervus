@@ -34,8 +34,6 @@ public class AcervusProxyRequests extends AcervusProxy {
     private static final String API_LIST_BORROWED_BOOKS_URL = "https://acervus.unicamp.br/emprestimo/ListarCirculacoesEmAberto";
     private static final String API_RENEWAL_URL = "https://acervus.unicamp.br/emprestimo/renovar";
 
-    private static final String SUCCESSFULL_RENEWAL_RESULT_MSG = "Empréstimo renovado";
-    private static final String FAILED_RENEWAL_RESULT_MSG = "Empréstimo não renovado";
     private static final String LAST_RENEWAL_RESULT_MSG = "Este empréstimo não poderá ser renovado novamente pelo terminal";
 
     private final Logger logger = Logger.getLogger(AcervusProxyRequests.class.getName());
@@ -52,7 +50,8 @@ public class AcervusProxyRequests extends AcervusProxy {
             this.user = null;
         }
 
-        try (ClassicHttpResponse response = HttpUtils.doPost(API_LOGIN_URL, this.cookieStore, getLoginRequestJsonStringEntity(user))) {
+        try (ClassicHttpResponse response = HttpUtils.doPost(API_LOGIN_URL, this.cookieStore,
+                getLoginRequestJsonStringEntity(user))) {
             if (wasLoginSuccessful(response)) {
                 this.user = user;
                 return true;
@@ -92,13 +91,13 @@ public class AcervusProxyRequests extends AcervusProxy {
         LinkedList<BorrowedBook> borrowedBooks = new LinkedList<>();
 
         this.logger.info("[getBorrowedBooks()] Sending request...");
-        request:
-        try (ClassicHttpResponse response = HttpUtils.doPost(API_LIST_BORROWED_BOOKS_URL, this.cookieStore,
+        request: try (ClassicHttpResponse response = HttpUtils.doPost(API_LIST_BORROWED_BOOKS_URL, this.cookieStore,
                 new StringEntity("{\"sort\": \"DataEmprestimo-desc\"}"))) {
 
             if (response.getCode() != 200) {
                 this.logger.severe(
-                        "[getBorrowedBooks()] HTTP status code is not 200 (received: " + response.getCode() + "). Returning empty list.");
+                        "[getBorrowedBooks()] HTTP status code is not 200 (received: " + response.getCode()
+                                + "). Returning empty list.");
                 break request;
             }
 
@@ -141,8 +140,7 @@ public class AcervusProxyRequests extends AcervusProxy {
 
         // Forge a renewal request to the Acervus API.
         JSONArray renewArray = buildRenewalRequestJson(books);
-        request:
-        try (ClassicHttpResponse response = HttpUtils.doPost(API_RENEWAL_URL, this.cookieStore,
+        request: try (ClassicHttpResponse response = HttpUtils.doPost(API_RENEWAL_URL, this.cookieStore,
                 new StringEntity(renewArray.toString()))) {
 
             if (response.getCode() != 200) {
@@ -182,7 +180,6 @@ public class AcervusProxyRequests extends AcervusProxy {
 
         return this.renewBooks(booksDueToday);
     }
-
 
     // Private interface:
 
@@ -280,7 +277,8 @@ public class AcervusProxyRequests extends AcervusProxy {
         return renewArray;
     }
 
-    private void parseRenewedBooks(List<BorrowedBook> allBooks, JSONArray renewedBooks, BookRenewalResult renewalResult) {
+    private void parseRenewedBooks(List<BorrowedBook> allBooks, JSONArray renewedBooks,
+            BookRenewalResult renewalResult) {
         for (int i = 0; i < renewedBooks.length(); i++) {
             JSONObject book = renewedBooks.getJSONObject(i);
 
@@ -293,7 +291,8 @@ public class AcervusProxyRequests extends AcervusProxy {
         }
     }
 
-    private void parseNotRenewedBooks(List<BorrowedBook> allBooks, JSONArray notRenewedBooks, BookRenewalResult renewalResult) {
+    private void parseNotRenewedBooks(List<BorrowedBook> allBooks, JSONArray notRenewedBooks,
+            BookRenewalResult renewalResult) {
         for (int i = 0; i < notRenewedBooks.length(); i++) {
             JSONObject book = notRenewedBooks.getJSONObject(i);
 
@@ -305,8 +304,10 @@ public class AcervusProxyRequests extends AcervusProxy {
         }
     }
 
-    // This method exists because acervus' api is stupid and won't return the book's id code in its renewal results. Also,
-    // it doesn't even return the book's full title, so partial name matching had to be implemented.
+    // This method exists because acervus' api is stupid and won't return the book's
+    // id code in its renewal results. Also,
+    // it doesn't even return the book's full title, so partial name matching had to
+    // be implemented.
     private BorrowedBook findBorrowedBookByTitle(List<BorrowedBook> books, String title) {
         for (BorrowedBook book : books) {
             if (book.getTitle().equals(title)) {
@@ -314,7 +315,8 @@ public class AcervusProxyRequests extends AcervusProxy {
             }
         }
 
-        // If only part of the book's title was returned by the acervus api, look for partial matches:
+        // If only part of the book's title was returned by the acervus api, look for
+        // partial matches:
         for (BorrowedBook book : books) {
             if (book.getTitle().contains(title)) {
                 return book;
