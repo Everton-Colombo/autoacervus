@@ -18,17 +18,20 @@ public class BookRenewerDaemon {
     @Value("${autoacervus.renewalMaxUsersPerThread}")
     private int maxThreads;
 
-    @Autowired
-    private UserDAO userDao;
+    private final UserDAO userDao;
+    private final MailService mailService;
 
     private static final Logger logger = Logger.getLogger(BookRenewerDaemon.class.getName());
 
     @Autowired
-    private MailService mailService;
+    public BookRenewerDaemon(UserDAO userDao, MailService mailService) {
+        this.userDao = userDao;
+        this.mailService = mailService;
+    }
 
     @Scheduled(cron = "${autoacervus.renewalCronExpression}")
     public void execute() {
-        LinkedList<Thread> bookRenewerThreads = new LinkedList<Thread>();
+        LinkedList<Thread> bookRenewerThreads = new LinkedList<>();
 
         List<User> users = new LinkedList<>();
         users.addAll(userDao.getUsersWithBooksDueToday());
@@ -42,7 +45,7 @@ public class BookRenewerDaemon {
         int maxUsersPerThread = users.size() / maxThreads + 1;
 
         stopLoops: for (int i = 0; i < maxThreads; i++) {
-            LinkedList<User> threadUsers = new LinkedList<User>();
+            LinkedList<User> threadUsers = new LinkedList<>();
             for (int j = 0; j < maxUsersPerThread; j++) {
                 int idx = i * maxUsersPerThread + j;
                 if (idx >= users.size()) {
@@ -63,7 +66,6 @@ public class BookRenewerDaemon {
                 thread.join();
             } catch (InterruptedException e) {
                 logger.warning("Thread interrupted. Exception: " + e.getMessage());
-                e.printStackTrace();
             }
         }
     }

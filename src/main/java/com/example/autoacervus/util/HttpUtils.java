@@ -8,7 +8,6 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ClassicHttpRequest;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.HttpResponse;
 
 import java.util.logging.Logger;
 
@@ -16,6 +15,7 @@ public class HttpUtils {
 
     private static final Logger logger = Logger.getLogger(HttpUtils.class.getName());
 
+    @SuppressWarnings("deprecation")
     private static ClassicHttpResponse doRequest(ClassicHttpRequest request, CookieStore cookieStore, HttpEntity... entities) {
         try (CloseableHttpClient httpClient = HttpClients.custom()
                 .setDefaultCookieStore(cookieStore)

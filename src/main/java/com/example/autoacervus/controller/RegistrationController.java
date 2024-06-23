@@ -13,10 +13,15 @@ import java.util.logging.Logger;
 
 @Controller
 public class RegistrationController {
-    @Autowired
+
     RegistrationService registrationService;
 
     private final Logger logger = Logger.getLogger(RegistrationController.class.getName());
+
+    @Autowired
+    public RegistrationController(RegistrationService registrationService) {
+        this.registrationService = registrationService;
+    }
 
     @PostMapping("/register")
     public String register(HttpServletRequest request, @RequestParam String username, @RequestParam String password,
@@ -31,8 +36,6 @@ public class RegistrationController {
                 logger.severe("[register()]: COULDNT LOGIN : ServletException: " + e.getMessage());
                 if (e.getMessage().equals("Bad credentials")) {
                     return "redirect:/?error";
-                } else {
-                    e.printStackTrace();
                 }
             }
 

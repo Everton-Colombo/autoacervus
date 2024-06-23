@@ -10,8 +10,12 @@ import java.security.Principal;
 @Service
 public class DashboardServiceImpl implements DashboardService{
 
+    private final UserDAO userDAO;
+
     @Autowired
-    private UserDAO userDAO;
+    public DashboardServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     @Override
     public User getLoggedInUser(Principal principal) {

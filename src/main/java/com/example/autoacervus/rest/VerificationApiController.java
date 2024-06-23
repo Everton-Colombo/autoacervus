@@ -21,16 +21,18 @@ import java.util.logging.Logger;
 @RequestMapping("/api/verification")
 public class VerificationApiController {
 
-    @Autowired
-    RegistrationService registrationService;
+    private final RegistrationService registrationService;
+    private final MailService mailService;
+    private final SpringTemplateEngine thymeleafTemplateEngine;
+
+    private final Logger logger = Logger.getLogger(VerificationApiController.class.getName());
 
     @Autowired
-    MailService mailService;
-
-    @Autowired
-    private SpringTemplateEngine thymeleafTemplateEngine;
-
-    private Logger logger = Logger.getLogger(VerificationApiController.class.getName());
+    public VerificationApiController(RegistrationService registrationService, MailService mailService, SpringTemplateEngine thymeleafTemplateEngine) {
+        this.registrationService = registrationService;
+        this.mailService = mailService;
+        this.thymeleafTemplateEngine = thymeleafTemplateEngine;
+    }
 
     @PostMapping("/verify")
     public String verify(HttpServletRequest request, @RequestParam String username, @RequestParam String password) throws LoginException {

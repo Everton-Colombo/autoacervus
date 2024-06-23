@@ -1,10 +1,10 @@
 package com.example.autoacervus.proxy;
 
+import com.example.autoacervus.exception.LoginException;
 import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
 import org.springframework.stereotype.Component;
-import javax.security.auth.login.LoginException;
 import java.util.List;
 
 @Component

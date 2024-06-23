@@ -8,13 +8,10 @@ import com.example.autoacervus.proxy.AcervusProxy;
 import com.example.autoacervus.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.security.auth.login.LoginException;
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,17 +19,19 @@ import java.util.Map;
 @RequestMapping("/debugApi")
 public class DebugApiController {
 
-    @Autowired
-    private MailService emailService;
+    private final MailService emailService;
+    private final UserDAO userDAO;
+    private final AcervusProxy acervusProxy;
 
     @Autowired
-    private UserDAO userDAO;
-
-    @Autowired
-    private AcervusProxy acervusProxy;
+    public DebugApiController(MailService emailService, UserDAO userDAO, AcervusProxy acervusProxy) {
+        this.emailService = emailService;
+        this.userDAO = userDAO;
+        this.acervusProxy = acervusProxy;
+    }
 
     @GetMapping("demo")
-    public String demo(Principal principal) throws LoginException {
+    public String demo(Principal principal) {
         User user = userDAO.findByEmailDac(principal.getName());
         acervusProxy.login(user);
 

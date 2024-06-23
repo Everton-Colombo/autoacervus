@@ -1,6 +1,7 @@
 package com.example.autoacervus.service;
 
 import com.example.autoacervus.dao.UserDAO;
+import com.example.autoacervus.exception.LoginException;
 import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
@@ -12,17 +13,20 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.LoginException;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
-    private Logger logger = Logger.getLogger(RegistrationServiceImpl.class.getName());
+
+    private final UserDAO userDao;
+    private final AcervusProxy acervusProxy;
+
+    private final Logger logger = Logger.getLogger(RegistrationServiceImpl.class.getName());
 
     @Autowired
-    UserDAO userDao;
-
-    @Autowired
-    AcervusProxy acervusProxy;
+    public RegistrationServiceImpl(UserDAO userDao, AcervusProxy acervusProxy) {
+        this.userDao = userDao;
+        this.acervusProxy = acervusProxy;
+    }
 
     @Override
     public boolean verifyUser(User user) {

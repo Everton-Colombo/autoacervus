@@ -1,10 +1,9 @@
 package com.example.autoacervus.proxy;
 
+import com.example.autoacervus.exception.LoginException;
 import com.example.autoacervus.model.BookRenewalResult;
 import com.example.autoacervus.model.entity.BorrowedBook;
 import com.example.autoacervus.model.entity.User;
-
-import javax.security.auth.login.LoginException;
 
 import com.example.autoacervus.util.HttpUtils;
 import org.apache.hc.core5.http.ClassicHttpResponse;
@@ -21,14 +20,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.cookie.BasicCookieStore;
 import org.apache.hc.client5.http.cookie.CookieStore;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
-import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 
 @Component
@@ -36,7 +31,6 @@ public class AcervusProxyRequests extends AcervusProxy {
     private static final String API_IS_LOGGED_IN_ULR = "https://acervus.unicamp.br/usuario/EstaLogado";
     private static final String API_LOGOUT_URL = "https://acervus.unicamp.br/logout";
     private static final String API_LOGIN_URL = "https://acervus.unicamp.br/login/login";
-    private static final String API_OBTAIN_MENU_URL = "https://acervus.unicamp.br/Favorito/ObterMenu";
     private static final String API_LIST_BORROWED_BOOKS_URL = "https://acervus.unicamp.br/emprestimo/ListarCirculacoesEmAberto";
     private static final String API_RENEWAL_URL = "https://acervus.unicamp.br/emprestimo/renovar";
 
@@ -45,7 +39,7 @@ public class AcervusProxyRequests extends AcervusProxy {
     private static final String LAST_RENEWAL_RESULT_MSG = "Este empréstimo não poderá ser renovado novamente pelo terminal";
 
     private final Logger logger = Logger.getLogger(AcervusProxyRequests.class.getName());
-    private CookieStore cookieStore = new BasicCookieStore();
+    private final CookieStore cookieStore = new BasicCookieStore();
 
     public AcervusProxyRequests() {
     }

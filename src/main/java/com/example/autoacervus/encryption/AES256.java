@@ -6,6 +6,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 import java.util.Base64;
@@ -45,7 +46,7 @@ public class AES256 {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivspec);
 
-            byte[] cipherText = cipher.doFinal(strToEncrypt.getBytes("UTF-8"));
+            byte[] cipherText = cipher.doFinal(strToEncrypt.getBytes(StandardCharsets.UTF_8));
             byte[] encryptedData = new byte[iv.length + cipherText.length];
             System.arraycopy(iv, 0, encryptedData, 0, iv.length);
             System.arraycopy(cipherText, 0, encryptedData, iv.length, cipherText.length);
@@ -77,7 +78,7 @@ public class AES256 {
             System.arraycopy(encryptedData, 16, cipherText, 0, cipherText.length);
 
             byte[] decryptedText = cipher.doFinal(cipherText);
-            return new String(decryptedText, "UTF-8");
+            return new String(decryptedText, StandardCharsets.UTF_8);
         } catch (Exception e) {
             // Handle the exception properly
             e.printStackTrace();

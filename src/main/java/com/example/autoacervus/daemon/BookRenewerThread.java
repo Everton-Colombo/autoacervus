@@ -13,16 +13,16 @@ import com.example.autoacervus.proxy.AcervusProxyRequests;
 import com.example.autoacervus.service.MailService;
 
 public class BookRenewerThread extends Thread {
-    private LinkedBlockingQueue<User> renewalQueue;
-    private UserDAO userDao;
+    private final LinkedBlockingQueue<User> renewalQueue;
+    private final UserDAO userDao;
 
-    private Logger logger = Logger.getLogger(BookRenewerThread.class.getName());
+    private final Logger logger = Logger.getLogger(BookRenewerThread.class.getName());
 
-    private MailService mailService;
+    private final MailService mailService;
 
     public BookRenewerThread(List<User> users, UserDAO userDao, MailService mailService) {
         super();
-        this.renewalQueue = new LinkedBlockingQueue<User>(users);
+        this.renewalQueue = new LinkedBlockingQueue<>(users);
         this.userDao = userDao;
         this.mailService = mailService;
     }

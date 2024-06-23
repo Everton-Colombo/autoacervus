@@ -24,10 +24,14 @@ import java.util.logging.Logger;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private Logger logger = Logger.getLogger(UserDetailsServiceImpl.class.getName());
+    private final UserDAO userDAO;
+
+    private final Logger logger = Logger.getLogger(UserDetailsServiceImpl.class.getName());
 
     @Autowired
-    private UserDAO userDAO;
+    public UserDetailsServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     /**
      * When handling authentication, Spring Security manipulates a UserDetails

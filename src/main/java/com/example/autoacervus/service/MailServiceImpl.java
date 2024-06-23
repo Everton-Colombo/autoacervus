@@ -20,16 +20,19 @@ import java.util.logging.Logger;
 @Service
 public class MailServiceImpl implements MailService {
 
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
-
-    @Autowired
-    private JavaMailSender emailSender;
-
-    @Autowired
-    private SpringTemplateEngine thymeleafTemplateEngine;
+    private final JavaMailSender emailSender;
+    private final SpringTemplateEngine thymeleafTemplateEngine;
 
     @Value("${spring.mail.username}")
     private String fromMail;
+
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+
+    @Autowired
+    public MailServiceImpl(JavaMailSender emailSender, SpringTemplateEngine thymeleafTemplateEngine) {
+        this.emailSender = emailSender;
+        this.thymeleafTemplateEngine = thymeleafTemplateEngine;
+    }
 
     @Override
     @Async

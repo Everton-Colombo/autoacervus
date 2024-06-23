@@ -18,14 +18,17 @@ import java.util.logging.Logger;
 @Controller
 public class DashboardController {
 
-    @Autowired
-    private DashboardService dashboardService;
-
-    @Autowired
-    private MailService mailService;
+    private final DashboardService dashboardService;
+    private final MailService mailService;
 
     private final DateTimeFormatter dtFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private final Logger logger = Logger.getLogger(DashboardController.class.getName());
+
+    @Autowired
+    public DashboardController(DashboardService dashboardService, MailService mailService) {
+        this.dashboardService = dashboardService;
+        this.mailService = mailService;
+    }
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, Principal principal) {

@@ -35,11 +35,6 @@ public class BorrowedBook {
     @Column(name = "canRenew")
     private boolean canRenew = true;
 
-    // private String callNumber;
-    // private String inventoryRegistryNumber;
-    // private String library;
-    // private LocalDate borrowDate;
-
     public BorrowedBook(User borrower, String title, int code, int registryCode, LocalDate expectedReturnDate) {
         this.borrower = borrower;
         this.title = title;
@@ -49,7 +44,7 @@ public class BorrowedBook {
     }
 
     public BorrowedBook() {
-    };
+    }
 
     public User getBorrower() {
         return borrower;
