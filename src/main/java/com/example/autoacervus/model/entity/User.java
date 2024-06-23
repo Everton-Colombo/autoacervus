@@ -2,6 +2,7 @@ package com.example.autoacervus.model.entity;
 
 import com.example.autoacervus.encryption.AES256PasswordEncoder;
 import jakarta.persistence.*;
+import org.hibernate.collection.spi.PersistentList;
 
 import java.util.*;
 
@@ -59,18 +60,18 @@ public class User {
     }
 
     public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {
-        this.borrowedBooks.clear();
-        if(borrowedBooks != null) {
-            this.borrowedBooks.addAll(borrowedBooks);
+        if (borrowedBooks instanceof PersistentList) {
+            this.borrowedBooks = borrowedBooks;
+        } else {
+            this.borrowedBooks.clear();
+            if(borrowedBooks != null) {
+                this.borrowedBooks.addAll(borrowedBooks);
+            }
         }
     }
 
     public List<BorrowedBook> getBorrowedBooks() {
         return borrowedBooks;
-    }
-
-    public void updateBorrowedBooks(Collection<BorrowedBook> borrowedBooks) {
-        this.borrowedBooks = new LinkedList<>(borrowedBooks);
     }
 
     public UserSettings getSettings() {

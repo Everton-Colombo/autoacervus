@@ -78,14 +78,13 @@ public class BookRenewerThread extends Thread {
                 }
                 this.logger.info("[Thread-" + this.getId() + "] " + registeredBookString);
 
-                user.updateBorrowedBooks(borrowedBooks); // setBorrowedBooks fails because you can't leave a stray list
-                                                         // of borrowed books floating around (JPA)
+                user.setBorrowedBooks(borrowedBooks);
                 user.getUserStats().incrementRenewalCount(renewals.size());
                 this.userDao.save(user);
 
                 // Only send email if some renewal happened (or failed to do so) and user wants
                 // to receive emails.
-                if ((renewals.isEmpty() && failedRenewals.isEmpty() && justExceededRenewals.isEmpty()) ||
+                if (renewalResult.getAllBooksRequestedForRenewal().isEmpty() ||
                         !user.getSettings().getReceiveEmails()) {
                     return;
                 }
