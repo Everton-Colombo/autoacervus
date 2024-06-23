@@ -40,10 +40,11 @@ services:
     ports:
       - 80:80
       - 443:443
-    volumes: ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      ./nginx/autoacervus.conf:/etc/nginx/autoacervus.conf
-      ./nginx/certbot/conf:/etc/letsencrypt
-      ./nginx/certbot/www:/var/www/certbot
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/autoacervus.conf:/etc/nginx/autoacervus.conf
+      - ./nginx/certbot/conf:/etc/letsencrypt
+      - ./nginx/certbot/www:/var/www/certbot
   certbot:
     image: certbot/certbot
     container_name: autoacervus-certbot
