@@ -45,7 +45,7 @@ public class DashboardController {
         return "dashboard";
     }
 
-    @DeleteMapping("/user")
+    @PostMapping("/user")
     public String deleteUser(HttpServletRequest request, Principal principal) {
         logger.info("[deleteUser()] Deleting user: " + principal.getName());
 
@@ -63,7 +63,7 @@ public class DashboardController {
         return "redirect:/";
     }
 
-    @PutMapping("/userSettings")
+    @PostMapping("/userSettings")
     public String updateSettings(Principal principal, @ModelAttribute UserSettings userSettings) {
         logger.info("[updateSettings()] Updating user settings: " + userSettings);
 

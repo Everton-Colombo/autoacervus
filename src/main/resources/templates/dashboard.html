@@ -46,7 +46,7 @@
         <div class="card titled-card">
             <h2 class="card-title">Configurações</h2>
             <table id="settings-table" class="card-content">
-                <form th:object="${userSettings}" th:action="@{/userSettings}" th:method="PUT">
+                <form th:object="${userSettings}" th:action="@{/userSettings}" th:method="POST">
                     <tr>
                         <td class="label">Receber e-mails do autoacervus:</td>
                         <td class="value">
@@ -66,7 +66,7 @@
                 <tr>
                     <td class="label">Remover minha conta do autoacervus:</td>
                     <td class="value">
-                        <form th:method="DELETE" th:action="@{/user}">
+                        <form th:method="POST" th:action="@{/user}">
                             <button type="submit"
                                     class="btn filled"
                                     onclick="return confirm('Tem certeza de que quer remover sua conta do autocervus?\n(seus empréstimos deixarão de ser renovados automaticamente)');">
