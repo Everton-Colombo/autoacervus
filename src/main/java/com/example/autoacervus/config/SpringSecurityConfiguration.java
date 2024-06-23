@@ -36,7 +36,7 @@ public class SpringSecurityConfiguration {
                         .loginProcessingUrl("/authenticate")
                         .defaultSuccessUrl("/dashboard", true)
                         .permitAll())
-                .logout(LogoutConfigurer::permitAll)
+                .logout(logout -> logout.permitAll())
                 .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
