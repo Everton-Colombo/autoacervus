@@ -1,7 +1,7 @@
 # autoacervus
 
 ### Site
-<https://www.autoacervus.com/>  (Execução garantida até o fim de jun/2024)
+<autoacervus.com>  (Execução garantida até o fim de jun/2024)
 
 ### Instruções para Deploy
 
