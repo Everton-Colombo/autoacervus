@@ -23,7 +23,7 @@ public class MailServiceImpl implements MailService {
     private final JavaMailSender emailSender;
     private final SpringTemplateEngine thymeleafTemplateEngine;
 
-    @Value("${spring.mail.username}")
+    @Value("${spring.mail.properties.mail.smtp.from}")
     private String fromMail;
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
