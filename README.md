@@ -9,7 +9,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Everton-Colombo/autoacervus">
-    <img src="src/main/resources/static/images/logo-full.svg" alt="Logo" width="80" height="80">
+    <img src="src/main/resources/static/images/logo-full.svg" alt="Logo" width="80" height="80" style="background-color: white">
   </a>
 
   <h3 align="center">AutoAcervus</h3>
