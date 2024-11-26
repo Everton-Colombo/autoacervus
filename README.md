@@ -1,7 +1,60 @@
-# autoacervus
+<a id="readme-top"></a>
 
-### Site
-<https://autoacervus.com/>  (Execução garantida até o fim de jun/2024)
+![GitHub repo size](https://img.shields.io/github/repo-size/Everton-Colombo/autoacervus?style=for-the-badge)
+![GitHub language count](https://img.shields.io/github/languages/count/Everton-Colombo/autoacervus?style=for-the-badge)
+![GitHub stars count](https://img.shields.io/github/stars/Everton-Colombo/autoacervus?style=for-the-badge)
+![Bitbucket open issues](https://img.shields.io/bitbucket/issues/Everton-Colombo/autoacervus?style=for-the-badge)
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/Everton-Colombo/autoacervus">
+    <img src="src/main/resources/static/images/logo-full.svg" alt="Logo" width="80" height="80">
+  </a>
+
+  <h3 align="center">AutoAcervus</h3>
+
+  <p align="center">
+    Serviço web para renovação automático de empréstimo de livros no Sistema de Bibliotecas da Unicamp (SBU)
+    <br />
+    (Projeto final da disciplina MC322 - Programação Orientada a Objetos)
+    <br />
+    <br />
+    <a href="https://docs.google.com/document/d/1WHx2hEnbyBYFC4CyMHMCtGe-4rY9JDdWDebK5mrI0zE/edit?usp=sharing">Relatório do projeto</a>
+    ·
+    <a href="https://docs.google.com/presentation/d/17AEzoS3YiGCiDXaCo9Z7VaEceQDwxCuV7FqR3COiW0o/edit#slide=id.g2e7beecba21_2_16">Slides de apresentação</a>
+  </p>
+</div>
+
+<!-- ABOUT THE PROJECT -->
+## Sobre o Projeto
+
+<div align="center">
+    <img src="src/main/resources/static/images/screenshot.png" alt="Screenshot" style="border-radius: 15px;">
+</div>
+
+Para renovar o empréstimo de um livro de uma das bibliotecas da Unicamp, os estudantes devem acessar o site “https://acervus.unicamp.br/”, entrar com sua conta SBU (Sistema de Bibliotecas Unicamp), selecionar os livros a serem renovados e clicar no botão “renovar empréstimos”.  No máximo, os livros podem ser emprestados por uma semana antes de precisarem ser renovados, o que significa que esse processo de renovação deve ser feito pelo menos uma vez por semana a fim de manter a posse dos livros por maior tempo. Dada a natureza mecânica do processo e a frequência com a qual deve ser feito, apresenta-se a ideia de criar um sistema que automaticamente o faz, tudo em segundo plano, sem que o usuário deva se preocupar com a tarefa.
+
+A relativa facilidade em automatizar o sistema Acervus e a grande utilidade do projeto (em teoria, todos que emprestam livros das bibliotecas se beneficiariam em utilizá-lo) justificam o desenvolvimento do projeto, ao qual deu-se o nome de autoacervus.
+
+<ul>
+    <li> Link da plataforma: https://autoacervus.com/ (em funcionamento pelo menos até o fim de jun/2024). </li>
+</ul>
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+### Feito com
+
+* ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+* ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
+* ![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)
+* ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-%23005C0F.svg?style=for-the-badge&logo=Thymeleaf&logoColor=white)
+* ![HttpUtils](https://img.shields.io/badge/apache%20httputils-%23D42029.svg?style=for-the-badge&logo=apache&logoColor=white)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Execução
 
 ### Instruções para Deploy
 
