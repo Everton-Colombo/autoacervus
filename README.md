@@ -15,7 +15,7 @@
   <h3 align="center">AutoAcervus</h3>
 
   <p align="center">
-    Serviço web para renovação automático de empréstimo de livros no Sistema de Bibliotecas da Unicamp (SBU)
+    Serviço web para renovação automática de empréstimo de livros no Sistema de Bibliotecas da Unicamp (SBU)
     <br />
     (Projeto final da disciplina MC322 - Programação Orientada a Objetos)
     <br />
